@@ -22,7 +22,7 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.overlay}>
-                <Image source={require('../assets/Sepantar_Logo_No_Bg.png')} style={styles.logo} />
+                <Image source={require('../assets/Sepantar_Logo_No_Bg1.png')} style={styles.logo} />
                 <Text style={styles.welcomeText}>Welcome Back</Text>
             </View>
             <View style={styles.formContainer}>
@@ -50,29 +50,30 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
+        display: "flex",
         flex: 1,
-        justifyContent: 'flex-end',
+        // justifyContent: 'flex-end',
     },
     overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
+        // position: 'absolute',
+        // top: 0,
+        // left: 0,
+        // right: 0,
         alignItems: 'center',
         justifyContent: 'center',
         height: '40%', // Sesuaikan tinggi overlay
         borderBottomRightRadius: 40,
         borderBottomLeftRadius: 40,
-        padding: 20,
+        padding: 0,
     },
     logo: {
         width: 400, // Sesuaikan ukuran gambar
-        height: 400,
+        height: 200,
         resizeMode: 'contain',
-        marginTop: 20, // Menurunkan posisi gambar ke bawah
+        // marginTop: 20, // Menurunkan posisi gambar ke bawah
     },
     welcomeText: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
         color: '#2F4858',
         textAlign: 'center',
@@ -83,12 +84,12 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
         padding: 20,
-        height: '50%',
+        height: '60%',
     },
     title: {
         fontSize: 24,
         marginBottom: 16,
-        marginTop:20
+        marginTop: 40
     },
     input: {
         height: 40,
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         paddingHorizontal: 8,
         fontSize: 16,
-        marginTop:20
+        marginTop: 20
     },
     button: {
         backgroundColor: '#2F4858',
