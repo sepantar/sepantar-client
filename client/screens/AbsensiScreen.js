@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Accordion, Button, Paragraph, Square } from "tamagui";
 
-const { width, height } = Dimensions.get("window");
+export const { width, height } = Dimensions.get("window");
 
 const accordionData = [
   {
@@ -41,7 +41,7 @@ const AbsensiScreen = () => {
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.goBack()}>
           <ArrowLeft color="black" />
         </TouchableOpacity>
       </View>

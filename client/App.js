@@ -11,6 +11,7 @@ import HomeScreen from "./screens/HomeScreen";
 import * as SecureStore from "expo-secure-store";
 import { useFonts } from "expo-font";
 import AbsensiScreen from "./screens/AbsensiScreen";
+import SubjectListScreen from "./screens/SubjectsList";
 
 const Stack = createNativeStackNavigator();
 export const OnboardContext = React.createContext(null);
@@ -50,6 +51,7 @@ function App() {
               <>
                 <Stack.Screen name="Absensi" component={AbsensiScreen} />
                 <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="MataPelajaran" component={SubjectListScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
               </>
             )}
