@@ -18,6 +18,7 @@ import QRCodeScreen from "./screens/QRCodeScreen";
 import EditProfileScreen from "./screens/EditProfile";
 import DetailAbsensiScreen from "./screens/DetailAbsensi";
 import AttendanceScreen from "./screens/AttendanceScreen";
+import DetailSubjectScreen from "./screens/DetailSubject";
 
 
 const Stack = createNativeStackNavigator();
@@ -57,10 +58,10 @@ function App() {
             ) : (
               <>
                 <Stack.Screen name="Attendance" component={AttendanceScreen} />
+                <Stack.Screen name="DetailMataPelajaran" component={DetailSubjectScreen} />
                 <Stack.Screen name="QRCodeScreen" component={QRCodeScreen} />
                 <Stack.Screen name="DetailAbsensi" component={DetailAbsensiScreen} />
                 <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-                <Stack.Screen name="DetailMataPelajaran" component={SubjectListScreen} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
                 <Stack.Screen name="StudyPlan" component={StudyPlanScreen} />
                 <Stack.Screen name="MataPelajaran" component={SubjectListScreen} />
