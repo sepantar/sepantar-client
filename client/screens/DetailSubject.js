@@ -166,6 +166,12 @@ const DetailSubjectScreen = ({ navigation }) => {
                   </View>
                 ))}
               </View>
+              <TouchableOpacity onPress={() => {navigation.navigate("NewChapter")}} style={styles.btn}>
+                <Text style={{color:"white"}}>Buat Materi Baru</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.btn2}>
+                <Text>Edit Materi</Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </View>
@@ -194,5 +200,26 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 70,
     borderWidth: 3,
     borderColor: "#d5dce6",
+  },
+  btn: {
+    marginTop: 50,
+    height: 50,
+    width: width * 0.9,
+    borderRadius: 10,
+    backgroundColor: "#2F4858",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  btn2: {
+    marginTop: 10,
+    marginBottom: 30,
+    height: 50,
+    width: width * 0.9,
+    borderRadius: 10,
+    backgroundColor: "#F6AE2D",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
   },
 });
