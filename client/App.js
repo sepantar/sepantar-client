@@ -20,6 +20,7 @@ import DetailAbsensiScreen from "./screens/DetailAbsensi";
 import AttendanceScreen from "./screens/AttendanceScreen";
 import DetailSubjectScreen from "./screens/DetailSubject";
 import NewChapterScreen from "./screens/NewChapterScreen";
+import EditChapterScreen from "./screens/EditChapter";
 
 
 const Stack = createNativeStackNavigator();
@@ -58,6 +59,7 @@ function App() {
               </>
             ) : (
               <>
+                <Stack.Screen name="EditChapter" component={EditChapterScreen} />
                 <Stack.Screen name="DetailMataPelajaran" component={DetailSubjectScreen} />
                 <Stack.Screen name="Attendance" component={AttendanceScreen} />
                 <Stack.Screen name="NewChapter" component={NewChapterScreen} />
