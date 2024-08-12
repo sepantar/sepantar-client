@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
-import { Button } from "tamagui";
 import { ArrowLeft } from "lucide-react-native";
 
 const subjectsData = [
