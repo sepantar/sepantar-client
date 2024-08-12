@@ -17,6 +17,7 @@ import StudyPlanScreen from "./screens/StudyPlanScreen";
 import QRCodeScreen from "./screens/QRCodeScreen";
 import EditProfileScreen from "./screens/EditProfile";
 import DetailAbsensiScreen from "./screens/DetailAbsensi";
+import AttendanceScreen from "./screens/AttendanceScreen";
 import DetailSubjectScreen from "./screens/DetailSubject";
 
 
@@ -56,6 +57,7 @@ function App() {
               </>
             ) : (
               <>
+                <Stack.Screen name="Attendance" component={AttendanceScreen} />
                 <Stack.Screen name="DetailMataPelajaran" component={DetailSubjectScreen} />
                 <Stack.Screen name="QRCodeScreen" component={QRCodeScreen} />
                 <Stack.Screen name="DetailAbsensi" component={DetailAbsensiScreen} />
