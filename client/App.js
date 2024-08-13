@@ -85,6 +85,7 @@ function App() {
               </>
             ) : (
               <>
+                <Stack.Screen name="StudyPlan" component={StudyPlanScreen} />
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Absensi" component={AbsensiScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
@@ -112,7 +113,6 @@ function App() {
                   name="DetailAbsensi"
                   component={DetailAbsensiScreen}
                 />
-                <Stack.Screen name="StudyPlan" component={StudyPlanScreen} />
                 <Stack.Screen name="StudyPlanSubjectList" component={ListMateriStudyPlan} />
                 <Stack.Screen
                   name="MataPelajaran"
