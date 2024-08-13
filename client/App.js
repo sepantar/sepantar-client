@@ -104,8 +104,8 @@ function App() {
                   name="EditChapter"
                   component={EditChapterScreen}
                 />
-                <Stack.Screen name="Attendance" component={AttendanceScreen} />
                 <Stack.Screen name="NewChapter" component={NewChapterScreen} />
+                <Stack.Screen name="Attendance" component={AttendanceScreen} />
                 <Stack.Screen name="QRCodeScreen" component={QRCodeScreen} />
                 <Stack.Screen
                   name="DetailAbsensi"
