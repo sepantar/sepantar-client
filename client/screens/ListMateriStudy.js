@@ -64,7 +64,7 @@ export default function ListMateriStudyPlan() {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("")}
+                  onPress={() => navigation.navigate("StudyPlanTask")}
                   style={{
                     backgroundColor:
                       idx % 2 === 0 ? COLORS.blue : COLORS.yellow,
