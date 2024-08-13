@@ -11,12 +11,20 @@ import { height, width } from "./AbsensiScreen";
 import { ArrowLeft } from "lucide-react-native";
 import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
+import * as DocumentPicker from 'expo-document-picker';
+
 
 export default function NewChapterScreen() {
   const navigation = useNavigation()
   const [title, setTitle] = React.useState("");
   const [summary, setSummary] = React.useState("");
   const [chapter, setChapter] = React.useState("");
+  const [selectedDocuments, setSelectedDocuments] = React.useState([])
+  
+  const handleAddDocument = async () => {
+    
+  } 
+
   return (
     <>
       <View style={{ flex: 1, alignItems: "center", height, width }}>
@@ -43,7 +51,7 @@ export default function NewChapterScreen() {
               }}
             />
           </View>
-          <TouchableOpacity style={styles.uploadBtn}>
+          <TouchableOpacity onPress={handleAddDocument} style={styles.uploadBtn}>
             <Text style={{ color: "white" }}>Unggah Materi Baru</Text>
           </TouchableOpacity>
           <View style={{ gap: 10 }}>

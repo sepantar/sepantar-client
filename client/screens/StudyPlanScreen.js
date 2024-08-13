@@ -4,6 +4,7 @@ import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Text, Button, Card, Stack } from 'tamagui';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons, MaterialIcons } from 'react-native-vector-icons'; // Pastikan Anda memiliki package ini terinstall
+import { ArrowLeft } from 'lucide-react-native';
 
 const initialStudyPlans = [
   { id: '1', name: 'Math Study Plan', checked: false },
@@ -55,21 +56,21 @@ const StudyPlanScreen = () => {
     <View style={styles.container}>
       {/* Header with Back Button */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={handleGoBack}>
+            <ArrowLeft color="black" />
+          </TouchableOpacity>
+        </View>
 
       {/* Body with Generate Study Plan Button and List of Study Plans */}
       <Stack space="$4" style={styles.body}>
-        <Button
+        <TouchableOpacity
           onPress={handleGenerateStudyPlan}
           size="large"
           variant="solid"
           style={styles.generateButton}
         >
           <Text style={styles.buttonText}>Generate Study Plan</Text>
-        </Button>
+        </TouchableOpacity>
 
         <Card padding="$4" borderRadius="$4" backgroundColor="#F6AE2D" shadow="$2">
           <FlatList
