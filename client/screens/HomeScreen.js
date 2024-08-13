@@ -22,7 +22,7 @@ const HomeScreen = () => {
       </View>
 
       {/* User Card */}
-      <TouchableOpacity onPress={() => navigation.navigate('UserScreen')} activeOpacity={0.7}>
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')} activeOpacity={0.7}>
         <Card padding="$4" marginBottom="$4" borderRadius="$4" backgroundColor="$background" shadow="$2" style={styles.userCard}>
           <View style={styles.avatarContainer}>
             <Image
@@ -43,7 +43,7 @@ const HomeScreen = () => {
       <Card padding="$4" borderRadius="$4" backgroundColor="$background" shadow="$2" style={styles.actionCard}>
         <Stack space="$2" style={styles.buttonStack}>
           <Button
-            onPress={() => navigation.navigate('AbsenceScreen')}
+            onPress={() => navigation.navigate('Absensi')}
             size="large"
             variant="outline"
             style={styles.button}
@@ -51,7 +51,7 @@ const HomeScreen = () => {
             Absence
           </Button>
           <Button
-            onPress={() => navigation.navigate('SubjectsScreen')}
+            onPress={() => navigation.navigate('MataPelajaran')}
             size="large"
             variant="outline"
             style={styles.button}
@@ -59,7 +59,7 @@ const HomeScreen = () => {
             Subjects
           </Button>
           <Button
-            onPress={() => navigation.navigate('StudyPlanScreen')}
+            onPress={() => navigation.navigate('StudyPlan')}
             size="large"
             variant="outline"
             style={styles.button}

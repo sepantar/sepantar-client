@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const detailSubjectData = [
   {
@@ -59,7 +60,8 @@ const detailSubjectData = [
   },
 ];
 
-const DetailSubjectScreen = ({ navigation }) => {
+const DetailSubjectScreen = () => {
+  const navigation = useNavigation()
   const [openAccordionId, setOpenAccordionId] = React.useState(null);
 
   const toggleOpen = (id) => {
@@ -168,9 +170,6 @@ const DetailSubjectScreen = ({ navigation }) => {
               </View>
               <TouchableOpacity onPress={() => {navigation.navigate("NewChapter")}} style={styles.btn}>
                 <Text style={{color:"white"}}>Buat Materi Baru</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btn2}>
-                <Text>Edit Materi</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

@@ -9,7 +9,7 @@ import {
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   return (
     <>
       <View style={{ flex: 1, alignItems: "center", height, width }}>
@@ -66,7 +66,7 @@ const ProfileScreen = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>{navigation.navigate("EditProfile")}}>
               <Text style={{ color: "gray", fontSize: 12 }}>Edit</Text>
             </TouchableOpacity>
           </View>
@@ -88,7 +88,7 @@ const ProfileScreen = () => {
                   </Text>
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>{navigation.navigate("EditProfile")}}>
               <Text style={{ color: "gray", fontSize: 12 }}>Edit</Text>
             </TouchableOpacity>
           </View>

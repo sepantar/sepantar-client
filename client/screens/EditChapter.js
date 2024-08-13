@@ -10,8 +10,10 @@ import {
   import { height, width } from "./AbsensiScreen";
   import { ArrowLeft } from "lucide-react-native";
   import * as React from "react";
+import { useNavigation } from "@react-navigation/native";
   
-  export default function EditChapterScreen({ navigation }) {
+  export default function EditChapterScreen() {
+    const navigation = useNavigation()
     const [title, setTitle] = React.useState("");
     const [summary, setSummary] = React.useState("");
     const [chapter, setChapter] = React.useState("");

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft } from "lucide-react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const subjectsData = [
   {
@@ -37,6 +38,7 @@ const subjectsData = [
 const COLORS = { blue: "#2F4858", yellow: "#F6AE2D", white: "#fff" };
 
 const SubjectListScreen = () => {
+  const navigation = useNavigation();
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -100,6 +102,7 @@ const SubjectListScreen = () => {
                     </Text>
                   </View>
                   <TouchableOpacity
+                  onPress={() => navigation.navigate("DetailMataPelajaran")}
                     style={{
                       backgroundColor:
                         idx % 2 === 0 ? COLORS.yellow : COLORS.blue,
