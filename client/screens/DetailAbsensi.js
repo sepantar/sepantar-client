@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const asbsensiMurid = [
   {
@@ -44,6 +45,7 @@ const asbsensiMurid = [
 ];
 
 const DetailAbsensiScreen = () => {
+  const navigation = useNavigation()
   return (
     <>
       <View style={{ flex: 1, alignItems: "center", height, width }}>

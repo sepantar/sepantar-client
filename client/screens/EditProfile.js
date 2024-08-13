@@ -13,8 +13,10 @@ import React, { useState } from "react";
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
+import { useNavigation } from "@react-navigation/native";
 
 const EditProfileScreen = () => {
+  const navigation = useNavigation()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");

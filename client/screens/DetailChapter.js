@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft, Minus, Plus } from "lucide-react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const summaryAljabar = [
   {
@@ -50,7 +51,8 @@ const summaryAljabar = [
   },
 ];
 
-export default function ChapterDetailScreen({ navigation }) {
+export default function ChapterDetailScreen() {
+  const navigation = useNavigation()
   const [openAccordionId, setOpenAccordionId] = React.useState(null);
   const toggleOpen = (id) => {
     setOpenAccordionId(openAccordionId === id ? null : id);
