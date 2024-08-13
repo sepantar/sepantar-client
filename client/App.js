@@ -22,6 +22,7 @@ import DetailSubjectScreen from "./screens/DetailSubject";
 import NewChapterScreen from "./screens/NewChapterScreen";
 import EditChapterScreen from "./screens/EditChapter";
 import ChapterDetailScreen from "./screens/DetailChapter";
+import ListMateriStudyPlan from "./screens/ListMateriStudy";
 
 const Stack = createNativeStackNavigator();
 export const OnboardContext = React.createContext(null);
@@ -112,6 +113,7 @@ function App() {
                   component={DetailAbsensiScreen}
                 />
                 <Stack.Screen name="StudyPlan" component={StudyPlanScreen} />
+                <Stack.Screen name="StudyPlanSubjectList" component={ListMateriStudyPlan} />
                 <Stack.Screen
                   name="MataPelajaran"
                   component={SubjectListScreen}

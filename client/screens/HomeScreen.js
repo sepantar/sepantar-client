@@ -87,7 +87,7 @@ const HomeScreen = () => {
             <Text style={styles.buttonText}>Subjects</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("StudyPlan")}
+            onPress={() => navigation.navigate("StudyPlanSubjectList")}
             size="$large"
             variant="outline"
             style={styles.button3}

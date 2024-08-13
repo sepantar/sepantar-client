@@ -56,7 +56,7 @@ const StudyPlanScreen = () => {
     <View style={styles.container}>
       {/* Header with Back Button */}
       <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={handleGoBack}>
             <ArrowLeft color="black" />
           </TouchableOpacity>
         </View>
