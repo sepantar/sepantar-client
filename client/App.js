@@ -21,6 +21,7 @@ import AttendanceScreen from "./screens/AttendanceScreen";
 import DetailSubjectScreen from "./screens/DetailSubject";
 import NewChapterScreen from "./screens/NewChapterScreen";
 import EditChapterScreen from "./screens/EditChapter";
+import ChapterDetailScreen from "./screens/DetailChapter";
 
 
 const Stack = createNativeStackNavigator();
@@ -53,12 +54,23 @@ function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {isAppFirstLaunched ? (
               <>
-                <Stack.Screen name="Onboarding" component={OnboardingScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Onboarding" component={OnboardingScreen} />
                 <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="EditChapter" component={EditChapterScreen} />
+                <Stack.Screen name="DetailMataPelajaran" component={DetailSubjectScreen} />
+                <Stack.Screen name="Attendance" component={AttendanceScreen} />
+                <Stack.Screen name="NewChapter" component={NewChapterScreen} />
+                <Stack.Screen name="QRCodeScreen" component={QRCodeScreen} />
+                <Stack.Screen name="DetailAbsensi" component={DetailAbsensiScreen} />
+                <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+                <Stack.Screen name="Profile" component={ProfileScreen} />
+                <Stack.Screen name="StudyPlan" component={StudyPlanScreen} />
+                <Stack.Screen name="MataPelajaran" component={SubjectListScreen} />
               </>
             ) : (
               <>
+                <Stack.Screen name="DetailChapter" component={ChapterDetailScreen} />
                 <Stack.Screen name="EditChapter" component={EditChapterScreen} />
                 <Stack.Screen name="DetailMataPelajaran" component={DetailSubjectScreen} />
                 <Stack.Screen name="Attendance" component={AttendanceScreen} />
