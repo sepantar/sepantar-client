@@ -131,5 +131,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 5,
     marginBottom: 20,
+    textAlignVertical: "top",
   },
 });
