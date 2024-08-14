@@ -1,22 +1,24 @@
+// hooks/useAuth.js
 import { useState, useEffect } from 'react';
-// import { getUserProfile } from '../api/user'; // API untuk mendapatkan data pengguna
+import * as SecureStore from 'expo-secure-store';
 
 export const useAuth = () => {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        // Fungsi untuk mendapatkan data pengguna dari API atau penyimpanan lokal
-        const fetchUserProfile = async () => {
-            try {
-                // const userProfile = await getUserProfile(); // Ganti dengan metode Anda untuk mendapatkan profil
-                setUser(userProfile);
-            } catch (error) {
-                console.error('Failed to fetch user profile', error);
-            }
-        };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await SecureStore.getItemAsync('user_data');
+        if (userData) {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error('Error fetching user data', error);
+      }
+    };
 
-        fetchUserProfile();
-    }, []);
+    fetchUser();
+  }, []);
 
-    return { user };
+  return { user };
 };
