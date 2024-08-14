@@ -60,9 +60,10 @@ const detailSubjectData = [
   },
 ];
 
-export default function ChapterListStudyPlanScreen() {
+export default function ChapterListStudyPlanScreen({route}) {
   const navigation = useNavigation();
-  const [data, setData] = useState(detailSubjectData);
+  const {perChapter} = route.params  
+  const [data, setData] = useState(perChapter);
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -70,15 +71,14 @@ export default function ChapterListStudyPlanScreen() {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <ArrowLeft color="black" />
         </TouchableOpacity>
-        <Text style={{fontSize: 17, fontWeight: "semibold"}}>Pilih Mata Pelajaran</Text>
+        <Text style={{fontSize: 17, fontWeight: "semibold"}}>Pilih Sub Materi</Text>
       </View>
-       
       <View style={{ flex: 1 }}>
         <FlatList
           data={data}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={()=>navigation.navigate("StudyPlan")} style={styles.btn}>
-              <Text style={styles.chapters}>{item.chapterName}</Text>
+              <Text style={styles.chapters}>{item.name}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.id}
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   chapters : {
     color: "white",
     fontSize: 18,
-    fontWeight: "semibold"
+    fontWeight: "semibold",
+    textAlign: "center"
   }
 });
