@@ -83,9 +83,11 @@ const HomeScreen = () => {
             <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
               Role: {data?.role}
             </Text>
-            <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
-              Class: {data?.classDetail?.class_name || data?.subject?.name}
-            </Text>
+            {data?.role === "teacher" ? <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
+              Subject: {data?.subject?.name}
+            </Text> : <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
+              Class: {data?.classDetail?.class_name}
+            </Text>}
           </Stack>
         </Card>
       </TouchableOpacity>
