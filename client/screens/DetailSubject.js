@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 const detailSubjectData = [
   {
@@ -60,13 +61,43 @@ const detailSubjectData = [
   },
 ];
 
-const DetailSubjectScreen = () => {
+const DetailSubjectScreen = ({route}) => {
   const navigation = useNavigation()
+  const [data, setData] = React.useState(null);
+  const {subject} = route.params
   const [openAccordionId, setOpenAccordionId] = React.useState(null);
 
   const toggleOpen = (id) => {
     setOpenAccordionId(openAccordionId === id ? null : id);
   };
+
+  const readDetailMapel = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      console.log(token);
+      
+      const res = await fetch(`http://147.185.221.22:1489/api/subject/${subject.subject._id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      console.log(response, "<<<<<detail");
+      
+      setData(response)
+    } catch (error) {
+      console.log("Failed to fetch user profile", error);
+    }
+  }
+  React.useEffect(() => {
+    readDetailMapel();
+    console.log(subject.subject._id, "<<<<<<el");
+  }, [])
+  
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -103,7 +134,7 @@ const DetailSubjectScreen = () => {
             <Text
               style={{ fontSize: 23, color: "#2F4858", fontWeight: "bold" }}
             >
-              Matematika Kelas 7
+              {data?.name} 
             </Text>
             <View
               style={{
@@ -112,19 +143,17 @@ const DetailSubjectScreen = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Text style={{ fontSize: 14, color: "#75797d" }}>Tingkat 7</Text>
+              <Text style={{ fontSize: 14, color: "#75797d" }}>Tingkat </Text>
               <Text style={{ fontSize: 14, color: "#75797d" }}>10 Chapter</Text>
             </View>
             <View style={{ marginTop: 20, gap: 5 }}>
               <Text
                 style={{ fontSize: 17, color: "#2F4858", fontWeight: "bold" }}
               >
-                Deskripsi Kelas
+                Deskripsi Mata Pelajaran
               </Text>
               <Text style={{ fontSize: 15, color: "#75797d" }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Habitasse dolor etiam sed ante donec quis sapien. Malesuada
-                rhoncus nullam eleifend lorem egestas mauris massa massa.
+                {data?.description}
               </Text>
             </View>
             <View style={{ marginTop: 20, gap: 5 }}>
@@ -134,25 +163,25 @@ const DetailSubjectScreen = () => {
                 Materi
               </Text>
               <View style={{ gap: 10 }}>
-                {detailSubjectData.map((el) => (
-                  <View key={el.id} style={{ gap: 5 }}>
+                {data?.chapters?.map((el,idx) => (
+                  <View key={idx} style={{ gap: 5 }}>
                     <TouchableOpacity
                       style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
                       }}
-                      onPress={() => toggleOpen(el.id)}
+                      onPress={() => toggleOpen(idx)}
                     >
-                      <Text>{el.chapterName}</Text>
-                      {openAccordionId === el.id ? (
+                      <Text>{el.name}</Text>
+                      {openAccordionId === idx ? (
                         <Minus color="#2F4858" />
                       ) : (
                         <Plus color="#2F4858" />
                       )}
                     </TouchableOpacity>
-                    {openAccordionId === el.id && (
+                    {openAccordionId === idx && (
                       <TouchableOpacity
-                        onPress={() => navigation.navigate("DetailChapter")}
+                        onPress={() => navigation.navigate("DetailChapter", {chapter: el})}
                       >
                         <Text
                           style={{
@@ -161,7 +190,7 @@ const DetailSubjectScreen = () => {
                             textAlign: "justify",
                           }}
                         >
-                          {el.chapterSummary}
+                          {el.description}
                         </Text>
                       </TouchableOpacity>
                     )}

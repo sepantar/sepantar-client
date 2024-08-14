@@ -59,8 +59,10 @@ const summaryAljabar = [
   },
 ];
 LogBox.ignoreAllLogs(true)// Ignore log notification by message
-export default function ChapterDetailScreen() {
+export default function ChapterDetailScreen({route}) {
   const navigation = useNavigation();
+  const {chapter} = route.params
+  const [loading, setLoading] = useState(false);
   const [openAccordionId, setOpenAccordionId] = useState(null);
   const [showTimeInput, setShowTimeInput] = useState(false);
   const [isStartTimePickerVisible, setStartTimePickerVisibility] = useState(false);
@@ -112,7 +114,9 @@ export default function ChapterDetailScreen() {
     }
 
     // Handle the saving of the study plan here
-    console.log("Study Plan:", studyPlan);
+    // console.log("Study Plan:", studyPlan);
+    console.log(studyPlan, "<<<<<studyplan");
+    addStudyPlan()
     setShowTimeInput(false); // Hide the input form after saving
     return true;
   };
@@ -128,6 +132,37 @@ export default function ChapterDetailScreen() {
       navigation.navigate("EditChapter");
     }
   };
+
+  const addStudyPlan = async () => {
+    try {
+      setLoading(true);
+
+      const res = await fetch("http://147.185.221.22:1489/api/subject/studyplan", {
+        method: "POST",
+        body: JSON.stringify({ start : studyPlan.startTime, to: studyPlan.endTime, chapterId: chapter.id }),
+      });
+
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      console.log(response);
+      
+      await SecureStore.setItemAsync(
+        "accessToken",
+        response.access_token
+      );
+      Alert.alert("Success", `Successfully added study plan`);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "An error occurred while logging in");
+    }
+  };
+
+  React.useEffect(() => {
+    console.log(chapter, "<<<<<<detailchapter");
+    console.log(studyPlan, "<<<<<<studyplan");
+  }, [])
 
   return (
     <>
@@ -146,7 +181,7 @@ export default function ChapterDetailScreen() {
               <Text
                 style={{ fontSize: 16, textAlign: "justify", color: "#75797d" }}
               >
-                Pengenalan aljabar, ekspresi, persamaan, dan fungsi dasar.
+                {chapter.description}
               </Text>
             </View>
             <View>
@@ -154,7 +189,7 @@ export default function ChapterDetailScreen() {
                 Rangkuman Materi
               </Text>
               <View style={{ gap: 15 }}>
-                {summaryAljabar.map((el) => (
+                {chapter.material.map((el) => (
                   <View key={el.id}>
                     <TouchableOpacity
                       style={{
@@ -170,7 +205,7 @@ export default function ChapterDetailScreen() {
                           textAlign: "justify",
                         }}
                       >
-                        {el.summaryPoint}
+                        {el.name}
                       </Text>
                       {openAccordionId === el.id ? (
                         <Minus color="#2F4858" />
@@ -186,7 +221,7 @@ export default function ChapterDetailScreen() {
                           textAlign: "justify",
                         }}
                       >
-                        {el.summaryParagraph}
+                        {el.summary}
                       </Text>
                     )}
                   </View>
