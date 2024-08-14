@@ -10,6 +10,7 @@ import {
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 const subjectsData = [
   {
@@ -38,7 +39,32 @@ const subjectsData = [
 const COLORS = { blue: "#2F4858", yellow: "#F6AE2D", white: "#fff" };
 
 const SubjectListScreen = () => {
+  const [data, setData] = React.useState(null);
   const navigation = useNavigation();
+  const readMapel = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      //ini link nya blm bner
+      const res = await fetch("http://147.185.221.22:1489/api/user/subject", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      console.log(response, "<<<<data mapel");
+      
+      setData(response)
+    } catch (error) {
+      console.log("Failed to fetch data mapel", error);
+    }
+  }
+  React.useEffect(() => {
+    readMapel();
+  }, []);
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -50,7 +76,7 @@ const SubjectListScreen = () => {
       <Text style={styles.title}>List Mata Pelajaran</Text>
       <View style={{ flex: 1, width: "100%", paddingHorizontal: 15, gap: 10 }}>
         <ScrollView>
-          {subjectsData.map((el, idx) => {
+          {data?.map((el, idx) => {
             return (
               <View
                 key={idx}
@@ -66,7 +92,7 @@ const SubjectListScreen = () => {
                 }}
               >
                 <Image
-                  source={{ uri: el.image }}
+                  source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
                   style={{ width: 150, height: 150, borderRadius: 10 }}
                 />
                 <View
@@ -83,7 +109,7 @@ const SubjectListScreen = () => {
                       color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                     }}
                   >
-                    {el.title}
+                    {el.name}
                   </Text>
                   <View>
                     <Text
@@ -91,18 +117,18 @@ const SubjectListScreen = () => {
                         color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                       }}
                     >
-                      {el.schedule}
+                      Tingkat {el.level}
                     </Text>
                     <Text
                       style={{
                         color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                       }}
                     >
-                      {el.teacherName}
+                      {el.teacher.name}
                     </Text>
                   </View>
                   <TouchableOpacity
-                  onPress={() => navigation.navigate("DetailMataPelajaran")}
+                  onPress={() => navigation.navigate("DetailMataPelajaran", {dariSubject: el._id})}
                     style={{
                       backgroundColor:
                         idx % 2 === 0 ? COLORS.yellow : COLORS.blue,

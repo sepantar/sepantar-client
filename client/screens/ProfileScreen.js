@@ -19,6 +19,8 @@ const ProfileScreen = ({navigation, route}) => {
   
   const handleLogout = async () => {
     try {
+      console.log("masuk logout");
+      
       await SecureStore.deleteItemAsync("accessToken");
       setIsSignedIn(false);
     } catch (error) {
