@@ -24,7 +24,7 @@ export default function ListMateriStudyPlan() {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
       const res = await fetch(
-        "http://13.239.38.113/api/user/subject",
+        "https://sepantar-app.vercel.app/api/user/subject",
         {
           method: "GET",
           headers: {
@@ -36,8 +36,6 @@ export default function ListMateriStudyPlan() {
       if (!res.ok) {
         throw response;
       }
-      console.log(response);
-      
       setData(response);
     } catch (error) {
       console.log(error);
@@ -80,7 +78,7 @@ export default function ListMateriStudyPlan() {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("StudyPlanTask", {subjectId: el_id})}
+                  onPress={() => navigation.navigate("StudyPlanTask", {perChapter: el.chapters})}
                   style={{
                     backgroundColor:
                       idx % 2 === 0 ? COLORS.blue : COLORS.yellow,
