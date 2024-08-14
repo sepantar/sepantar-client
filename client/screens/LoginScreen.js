@@ -49,7 +49,6 @@ export default function LoginScreen() {
       const role = await SecureStore.getItemAsync("role");
       setIsSignedIn(true);
       setRole(role); 
-      console.log(role);
       
 
       // Biasanya Anda akan melakukan autentikasi di sini
