@@ -31,7 +31,7 @@ export default function LoginScreen() {
         return;
       }
 
-      const res = await fetch("http://147.185.221.22:1489/api/user/login", {
+      const res = await fetch("http://13.239.38.113/api/user/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
