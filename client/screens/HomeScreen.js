@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Bell } from "lucide-react-native"; // Pastikan Anda memiliki icon Bell atau sesuaikan dengan ikon yang Anda gunakan
 
 import * as SecureStore from "expo-secure-store";
-import { RoleContext } from "../App";
 import ButtonGroupStudent from "../components/ButtonGroupStudent";
 import ButtonGroupTeacher from "../components/ButtonGroupTeacher";
 
@@ -58,7 +57,7 @@ const HomeScreen = () => {
 
       {/* User Card */}
       <TouchableOpacity
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() => navigation.navigate("Profile", { data })}
         activeOpacity={0.7}
       >
         <Card
