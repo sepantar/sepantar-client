@@ -11,6 +11,8 @@ import {
 import React, { useState, useRef } from "react";
 import * as SecureStore from "expo-secure-store";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { OnboardContext } from "../App";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 const COLORS = { primary: "#fff", yellow: "#F6AE2D" };
@@ -32,7 +34,9 @@ const onboardingSlides = [
   },
 ];
 
-const OnboardingScreen = ({ navigation }) => {
+const OnboardingScreen = () => {
+  const navigation = useNavigation()
+  const { setIsAppFirstLaunched } = React.useContext(OnboardContext);
   const [currentSlide, setCurrentSlide] = useState(0);
   const ref = useRef(null);
   const Slide = ({ item }) => {
@@ -108,6 +112,7 @@ const OnboardingScreen = ({ navigation }) => {
   };
   const handleOnboard = async () => {
     await SecureStore.setItemAsync("userOnboarded", "true");
+    setIsAppFirstLaunched(false);
     navigation.replace("Home");
   };
 

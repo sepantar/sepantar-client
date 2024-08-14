@@ -4,7 +4,7 @@ import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-n
 import { useNavigation } from '@react-navigation/native'; // Ensure this is imported
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
 
-export default function App() {
+export default function AttendanceScreen() {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
