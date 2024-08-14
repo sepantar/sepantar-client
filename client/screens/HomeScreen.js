@@ -12,10 +12,39 @@ import { Card, Button, Stack } from "tamagui";
 import { useNavigation } from "@react-navigation/native";
 import { Bell } from "lucide-react-native"; // Pastikan Anda memiliki icon Bell atau sesuaikan dengan ikon yang Anda gunakan
 
+import * as SecureStore from "expo-secure-store";
+import { RoleContext } from "../App";
+import ButtonGroupStudent from "../components/ButtonGroupStudent";
+import ButtonGroupTeacher from "../components/ButtonGroupTeacher";
+
 const { width } = Dimensions.get("window"); // Mendapatkan lebar layar untuk perhitungan
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [data, setData] = React.useState(null);
+
+  const readUser = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      const res = await fetch("http://147.185.221.22:1489/api/user/info", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      setData(response)
+    } catch (error) {
+      console.log("Failed to fetch user profile", error);
+    }
+  }
+
+  React.useEffect(() => {
+    readUser();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -48,13 +77,13 @@ const HomeScreen = () => {
           </View>
           <Stack spacing="$2" style={styles.userInfo}>
             <Text style={{fontSize: 20, fontWeight: "bold", color: "#3b3b3b"}}>
-              John Doe
+              {data?.name}
             </Text>
             <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
-              Role: Teacher
+              Role: {data?.role}
             </Text>
             <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
-              Class: Mathematics
+              Class: {data?.classDetail?.class_name}
             </Text>
           </Stack>
         </Card>
@@ -69,32 +98,7 @@ const HomeScreen = () => {
         shadow="$2"
         style={styles.actionCard}
       >
-        <Stack space="$2" style={styles.buttonStack}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Absensi")}
-            size="$large"
-            variant="outline"
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Absence</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("MataPelajaran")}
-            size="$large"
-            variant="outline"
-            style={styles.button2}
-          >
-            <Text style={styles.buttonText}>Subjects</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("StudyPlanSubjectList")}
-            size="$large"
-            variant="outline"
-            style={styles.button3}
-          >
-            <Text style={styles.buttonText}>Study Plan</Text>
-          </TouchableOpacity>
-        </Stack>
+        {data?.role === "student" ? <ButtonGroupStudent navigation={navigation}/>: <ButtonGroupTeacher navigation={navigation}/>}
       </Card>
     </View>
   );
@@ -146,52 +150,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.7, // Lebar border tombol
     borderRadius: 8,
   },
-  buttonStack: {
-    flexGrow: 1, // Membuat Stack mengisi sisa ruang
-  },
   actionText: {
     marginBottom: 15, // Jarak antara teks dan tombol
     fontSize: 18, // Ukuran font teks
     marginTop: 25,
-  },
-  button: {
-    paddingVertical: 10, // Memperbesar tinggi tombol
-    paddingHorizontal: 30, // Memperbesar lebar tombol
-    fontSize: 15, // Memperbesar ukuran teks
-    width: "100%",
-    height: "20%", // Memastikan tombol mengisi lebar card
-    marginBottom: 10, // Jarak antar tombol
-    backgroundColor: "#F6AE2D",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button2: {
-    paddingVertical: 10, // Memperbesar tinggi tombol
-    paddingHorizontal: 30, // Memperbesar lebar tombol
-    fontSize: 15, // Memperbesar ukuran teks
-    width: "100%",
-    height: "20%", // Memastikan tombol mengisi lebar card
-    marginBottom: 10, // Jarak antar tombol
-    backgroundColor: "#38A0ED",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button3: {
-    paddingVertical: 10, // Memperbesar tinggi tombol
-    paddingHorizontal: 30, // Memperbesar lebar tombol // Memperbesar ukuran teks
-    width: "100%",
-    height: "20%", // Memastikan tombol mengisi lebar card
-    marginBottom: 10, // Jarak antar tombol
-    backgroundColor: "#F26419",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText:{
-    fontSize: 20,
-    color: 'white'
   }
 });
 

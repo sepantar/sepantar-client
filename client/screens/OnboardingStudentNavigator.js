@@ -12,14 +12,16 @@ import StudyPlanScreen from "./StudyPlanScreen";
 import ListMateriStudyPlan from "./ListMateriStudy";
 import ChapterListStudyPlanScreen from "./ChapterList";
 import SubjectListScreen from "./SubjectsList";
+import ScheduleScreen from "./ScheduleScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function OnboardingNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Schedule" component={ScheduleScreenn} />
       <Stack.Screen name="Absensi" component={AbsensiScreen} />
       <Stack.Screen
         name="DetailMataPelajaran"
