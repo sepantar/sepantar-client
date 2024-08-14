@@ -10,13 +10,15 @@ import NewChapterScreen from "./NewChapterScreen";
 import AttendanceScreen from "./AttendanceScreen";
 import DetailAbsensiScreen from "./DetailAbsensi";
 import SubjectListScreen from "./SubjectsList";
+import ScheduleScreen from "./ScheduleScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function TeacherNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Schedule" component={ScheduleScreen} />
       <Stack.Screen name="Absensi" component={AbsensiScreen} />
       <Stack.Screen
         name="DetailMataPelajaran"
