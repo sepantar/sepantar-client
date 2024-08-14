@@ -1,5 +1,7 @@
 import { ArrowLeft } from "lucide-react-native";
+import * as React from "react";
 import {
+  Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -10,28 +12,43 @@ import {
 import { height, width } from "./AbsensiScreen";
 import { useNavigation } from "@react-navigation/native";
 
-const subjectsData = [
-  {
-    title: "Matematika",
-  },
-  {
-    title: "Bahasa Inggris",
-  },
-  {
-    title: "Bahasa Indonesia",
-  },
-  {
-    title: "IPA",
-  },
-  {
-    title: "IPS",
-  },
-];
+import * as SecureStore from "expo-secure-store";
 
 const COLORS = { blue: "#2F4858", yellow: "#F6AE2D", white: "#fff" };
 
 export default function ListMateriStudyPlan() {
   const navigation = useNavigation();
+  const [data, setData] = React.useState(null);
+
+  const readSubjects = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      const res = await fetch(
+        "http://13.239.38.113/api/user/subject",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      console.log(response);
+      
+      setData(response);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "An error occurred while fetching subjects");
+    }
+  };
+
+  React.useEffect(() => {
+    readSubjects();
+  }, []);
+
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -50,7 +67,7 @@ export default function ListMateriStudyPlan() {
         }}
       >
         <ScrollView style={{ flex: 1 }}>
-          {subjectsData.map((el, idx) => {
+          {data?.map((el, idx) => {
             return (
               <View
                 key={idx}
@@ -60,22 +77,21 @@ export default function ListMateriStudyPlan() {
                   //   backgroundColor: "blue",
                   marginBottom: 15,
                   width: "100%",
-                  
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("StudyPlanTask")}
+                  onPress={() => navigation.navigate("StudyPlanTask", {subjectId: el_id})}
                   style={{
                     backgroundColor:
                       idx % 2 === 0 ? COLORS.blue : COLORS.yellow,
                     width: width * 0.8,
-                    height: 80,
+                    height: 90,
                     justifyContent: "center",
                     alignItems: "center",
                     borderRadius: 15,
                   }}
                 >
-                  <Text style={{ color: "white" }}>{el.title}</Text>
+                  <Text style={{ color: "white", fontSize: 18 }}>{el.name}</Text>
                 </TouchableOpacity>
               </View>
             );

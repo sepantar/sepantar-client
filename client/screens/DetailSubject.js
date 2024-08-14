@@ -1,82 +1,84 @@
 import { ArrowLeft, Minus, Plus } from "lucide-react-native";
 import * as React from "react";
 import {
-    ImageBackground,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  ImageBackground,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
+import * as DocumentPicker from "expo-document-picker";
+import { RoleContext } from "../App";
 
-const detailSubjectData = [
-    {
-        id: 1,
-        chapterName: "Aljabar",
-        chapterSummary:
-            "Pengenalan aljabar, ekspresi, persamaan, dan fungsi dasar.",
-    },
-    {
-        id: 2,
-        chapterName: "Geometri",
-        chapterSummary:
-            "Pembahasan tentang bentuk-bentuk dasar, sudut, dan konsep-konsep geometri lainnya.",
-    },
-    {
-        id: 3,
-        chapterName: "Trigonometri",
-        chapterSummary:
-            "Dasar-dasar trigonometri, fungsi sinus, kosinus, dan tangen.",
-    },
-    {
-        id: 4,
-        chapterName: "Kalkulus Dasar",
-        chapterSummary: "Pengenalan limit, turunan, dan integral.",
-    },
-    {
-        id: 5,
-        chapterName: "Statistika",
-        chapterSummary:
-            "Pengantar statistik, mean, median, mode, dan distribusi data.",
-    },
-    {
-        id: 6,
-        chapterName: "Probabilitas",
-        chapterSummary:
-            "Konsep dasar probabilitas dan cara menghitung peluang.",
-    },
-    {
-        id: 7,
-        chapterName: "Matriks dan Vektor",
-        chapterSummary:
-            "Pengenalan matriks, operasi dasar pada matriks, dan dasar-dasar vektor.",
-    },
-    {
-        id: 8,
-        chapterName: "Logika Matematika",
-        chapterSummary:
-            "Dasar-dasar logika, proposisi, dan pembuktian matematika.",
-    },
-];
 
 const DetailSubjectScreen = ({ route }) => {
-    const navigation = useNavigation();
-    const [data, setData] = React.useState(null);
-    const { subject, dariSubject } = route.params;
-    console.log(subject, "<<<<<<subjecttttt");
-    console.log(dariSubject, "<<<<<,subjectlist");
+  const navigation = useNavigation();
+  const [data, setData] = React.useState(null);
+  const { role } = React.useContext(RoleContext);
+ const { subject, dariSubject } = route.params;
+  const [loading, setLoading] = React.useState(false);
+ const [openAccordionId, setOpenAccordionId] = React.useState(null);
 
-    const [openAccordionId, setOpenAccordionId] = React.useState(null);
+  const handleAddDocument = async (id) => {
+    try {
+      setLoading(true);
+      const token = await SecureStore.getItemAsync("accessToken");
 
-    const toggleOpen = (id) => {
-        setOpenAccordionId(openAccordionId === id ? null : id);
-    };
+      const res = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+        copyToCacheDirectory: false,
+      });
 
-    const readDetailMapel = async () => {
+      if (res.canceled === false) {
+        let data = new FormData();
+        console.log(data, "init");
+
+        data.append("file", {
+          name: res.assets[0].name,
+          type: res.assets[0].mimeType,
+          uri: res.assets[0].uri,
+        });
+        data.append("subjectId", id);
+
+        const response = await fetch(
+          "http://147.185.221.22:1489/api/subject/chapter",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: data,
+          }
+        );
+        const resJson = await response.json();
+        if (!response.ok) {
+          console.error("Error response:", resJson);
+          throw new Error(resJson.message || "Upload failed");
+        }
+
+        setLoading(false);
+
+        Alert.alert("Success", "Document uploaded successfully");
+        await readDetailMapel();
+      } else {
+        throw new Error("User canceled document picking");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      Alert.alert("Error", "An error occurred while uploading the document");
+    }
+  };
+  
+const readDetailMapel = async () => {
         try {
             const token = await SecureStore.getItemAsync("accessToken");
             console.log(token);
@@ -230,17 +232,23 @@ const DetailSubjectScreen = ({ route }) => {
                                         )}
                                     </View>
                                 ))}
+                                {role === "teacher" ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleAddDocument(data?._id);
+                    }}
+                    style={styles.btn}
+                  >
+                    {loading ? (
+                      <ActivityIndicator size="large" color="white" />
+                    ) : (
+                      <Text style={{ color: "white" }}>Buat Materi Baru</Text>
+                    )}
+                  </TouchableOpacity>
+                ) : (
+                  <></>
+                )}
                             </View>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate("NewChapter");
-                                }}
-                                style={styles.btn}
-                            >
-                                <Text style={{ color: "white" }}>
-                                    Buat Materi Baru
-                                </Text>
-                            </TouchableOpacity>
                         </View>
                     </ScrollView>
                 </View>

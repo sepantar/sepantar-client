@@ -1,4 +1,5 @@
 import {
+  Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -10,20 +11,118 @@ import {
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft } from "lucide-react-native";
 import * as React from "react";
+import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
-import * as DocumentPicker from 'expo-document-picker';
+import * as DocumentPicker from "expo-document-picker";
 
-
-export default function NewChapterScreen() {
-  const navigation = useNavigation()
+export default function NewChapterScreen({ route }) {
+  const navigation = useNavigation();
   const [title, setTitle] = React.useState("");
   const [summary, setSummary] = React.useState("");
   const [chapter, setChapter] = React.useState("");
-  const [selectedDocuments, setSelectedDocuments] = React.useState([])
-  
+  const [selectedDocuments, setSelectedDocuments] = React.useState([]);
+
+  // const handleAddDocument = async () => {
+  //   try {
+  //     const token = await SecureStore.getItemAsync("accessToken");
+  //     console.log(token, 'tokeeeeen');
+
+  //     const res = await DocumentPicker.getDocumentAsync({
+  //       type: "*/*",
+  //       copyToCacheDirectory: false
+  //     });
+  //     console.log(res, 'documentpicker');
+
+  //     if (res.canceled === false) {
+  //       let data = new FormData();
+  //       console.log(data, 'init');
+
+  //       data.append(
+  //         "file",
+  //         {
+  //           name: res?.assets[0]?.name,
+  //           type: res?.assets[0]?.mimeType,
+  //           size: res?.assets[0]?.size,
+  //           uri: encodeURI(res?.assets[0]?.uri.replace("file://", "")),
+  //         }
+  //       );
+  //       console.log(data, 'formdata');
+
+  //       data.append("subjectId", route.params.subjectId.toString());
+  //       console.log(data, 'formdata');
+
+  //       const response = await fetch("http://13.239.38.113/api/subject/chapter", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Accept: "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: data
+  //       });
+  //       console.log(response, 'response');
+
+  //       const res = await response.json();
+  //       if (!res.ok) {
+  //         throw response;
+  //       }
+  //       console.log(res, 'ressssssssssss');
+  //     } else {
+  //       throw new Error("User canceled document picking")
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const handleAddDocument = async () => {
-    
-  } 
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+
+      const res = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+        copyToCacheDirectory: false,
+      });;
+
+      if (res.canceled === false) {
+        let data = new FormData();
+        console.log(data, "init");
+
+        data.append("file", {
+          name: res.assets[0].name,
+          type: res.assets[0].mimeType,
+          uri: res.assets[0].uri,
+        });
+
+        data.append("subjectId", route.params.subjectId.toString());
+
+        const response = await fetch(
+          "http://13.239.38.113/api/subject/chapter",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: data,
+          }
+        );
+        const resJson = await response.json();
+        if (!response.ok) {
+          console.error("Error response:", resJson);
+          throw new Error(resJson.message || "Upload failed");
+        }
+        
+        Alert.alert("Success", "Document uploaded successfully");
+      } else {
+        throw new Error("User canceled document picking");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      Alert.alert("Error", "An error occurred while uploading the document");
+    }
+  };
 
   return (
     <>
@@ -51,7 +150,10 @@ export default function NewChapterScreen() {
               }}
             />
           </View>
-          <TouchableOpacity onPress={handleAddDocument} style={styles.uploadBtn}>
+          <TouchableOpacity
+            onPress={handleAddDocument}
+            style={styles.uploadBtn}
+          >
             <Text style={{ color: "white" }}>Unggah Materi Baru</Text>
           </TouchableOpacity>
           <View style={{ gap: 10 }}>
@@ -85,8 +187,8 @@ export default function NewChapterScreen() {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.saveBtn}>
-              <Text style={{ color: "white" }}>Upload</Text>
-            </TouchableOpacity>
+            <Text style={{ color: "white" }}>Upload</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </>

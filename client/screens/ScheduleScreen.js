@@ -44,7 +44,7 @@ const ScheduleScreen = () => {
   const readUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
-      const res = await fetch("http://147.185.221.22:1489/api/user/schedule", {
+      const res = await fetch("http://13.239.38.113/api/user/schedule", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
