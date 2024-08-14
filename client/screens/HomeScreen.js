@@ -25,7 +25,7 @@ const HomeScreen = () => {
   const readUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
-      const res = await fetch("http://147.185.221.22:1489/api/user/info", {
+      const res = await fetch('http://147.185.221.22:1489/api/user/info', {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -35,6 +35,8 @@ const HomeScreen = () => {
       if (!res.ok) {
         throw response;
       }
+      console.log(response, "<<<<home");
+      
       setData(response)
     } catch (error) {
       console.log("Failed to fetch user profile", error);

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft } from "lucide-react-native";
+import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 
 const subjectsData = [
@@ -38,7 +39,33 @@ const subjectsData = [
 const COLORS = { blue: "#2F4858", yellow: "#F6AE2D", white: "#fff" };
 
 const ScheduleScreen = () => {
+  const [data, setData] = React.useState(null);
   const navigation = useNavigation();
+  const readUser = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      const res = await fetch("http://147.185.221.22:1489/api/user/schedule", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      console.log(response,"<<<<<<schedule");
+      
+      setData(response)
+    } catch (error) {
+      console.log("Failed to fetch user profile", error);
+    }
+  }
+
+  React.useEffect(() => {
+    readUser();
+  }, []);
+
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -50,10 +77,9 @@ const ScheduleScreen = () => {
       <Text style={styles.title}>Jadwal Mata Pelajaran Hari Ini</Text>
       <View style={{ flex: 1, width: "100%", paddingHorizontal: 15, gap: 10, marginTop: 5 }}>
         <ScrollView>
-          {subjectsData.map((el, idx) => {
+          {data?.map((el, idx) => {
             return (
               <View key={idx}>
-                <Text style={{fontSize: 18}}>{el.schedule}</Text>
                 <View
                   style={{
                     flexDirection: "row",
@@ -68,7 +94,7 @@ const ScheduleScreen = () => {
                   }}
                 >
                   <Image
-                    source={{ uri: el.image }}
+                    source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
                     style={{ width: 150, height: 150, borderRadius: 10 }}
                   />
                   <View
@@ -85,7 +111,7 @@ const ScheduleScreen = () => {
                         color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                       }}
                     >
-                      {el.title}
+                      {el.subject.name}
                     </Text>
                     <View>
                       <Text
@@ -93,18 +119,18 @@ const ScheduleScreen = () => {
                           color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                         }}
                       >
-                        {el.schedule}
+                        {el.startTime}:00 - {el.endTime}:00
                       </Text>
                       <Text
                         style={{
                           color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                         }}
                       >
-                        {el.teacherName}
+                        {el.teacher.name} 
                       </Text>
                     </View>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("DetailMataPelajaran")}
+                      onPress={() => navigation.navigate("DetailMataPelajaran",{subject:el})}
                       style={{
                         backgroundColor:
                           idx % 2 === 0 ? COLORS.yellow : COLORS.blue,
@@ -145,5 +171,6 @@ const styles = StyleSheet.create({
     color: "#2F4858",
     paddingHorizontal: 15,
     alignSelf: "flex-start",
+    marginBottom: 15
   },
 });
