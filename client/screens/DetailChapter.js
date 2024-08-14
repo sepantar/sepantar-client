@@ -16,55 +16,14 @@ import React, { useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import * as SecureStore from "expo-secure-store";
+import { RoleContext } from "../App";
 
-// Contoh peran pengguna. Anda bisa mendapatkan nilai ini dari state global atau context.
-const userRole = "student"; // ganti dengan 'teacher' untuk role teacher
 
-const summaryAljabar = [
-    {
-        id: 1,
-        summaryPoint: "Aljabar menggunakan simbol untuk angka dalam persamaan.",
-        summaryParagraph:
-            "Aljabar adalah cabang matematika yang menggunakan simbol-simbol, seperti huruf, untuk mewakili angka dalam persamaan dan rumus. Simbol-simbol ini disebut variabel dan memungkinkan penulisan persamaan yang berlaku umum, tidak hanya untuk satu angka tetapi untuk banyak situasi berbeda.",
-    },
-    {
-        id: 2,
-        summaryPoint:
-            "Persamaan aljabar menunjukkan hubungan variabel dan konstanta.",
-        summaryParagraph:
-            "Persamaan aljabar adalah ekspresi matematika yang menunjukkan hubungan antara variabel (simbol yang mewakili angka) dan konstanta (angka tetap). Persamaan ini biasanya mengandung tanda sama dengan (=) yang menunjukkan bahwa dua sisi dari persamaan tersebut memiliki nilai yang sama.",
-    },
-    {
-        id: 3,
-        summaryPoint: "Variabel menggeneralisasi aturan atau pola matematika.",
-        summaryParagraph:
-            "Variabel adalah simbol yang digunakan untuk mewakili angka yang dapat berubah. Dalam aljabar, variabel memungkinkan penulisan aturan atau pola yang berlaku untuk berbagai situasi, bukan hanya satu kasus tertentu.",
-    },
-    {
-        id: 4,
-        summaryPoint:
-            "Operasi dasar meliputi penjumlahan, pengurangan, perkalian, dan pembagian.",
-        summaryParagraph:
-            "Operasi dasar dalam aljabar—penjumlahan, pengurangan, perkalian, dan pembagian—dilakukan pada variabel, sama seperti operasi aritmatika biasa tetapi diterapkan pada variabel.",
-    },
-    {
-        id: 5,
-        summaryPoint: "Sistem persamaan linear menyelesaikan masalah nyata.",
-        summaryParagraph:
-            "Sistem persamaan linear adalah kumpulan dua atau lebih persamaan linear yang bekerja bersama untuk menemukan nilai variabel yang memenuhi semua persamaan. Sistem ini sering digunakan untuk memecahkan masalah dalam berbagai bidang seperti sains, teknik, dan ekonomi.",
-    },
-    {
-        id: 6,
-        summaryPoint: "Fungsi menghubungkan dua set angka.",
-        summaryParagraph:
-            "Fungsi dalam aljabar menggambarkan hubungan antara dua set angka, di mana setiap input memiliki satu output. Fungsi digunakan untuk memahami bagaimana perubahan dalam satu variabel dapat mempengaruhi variabel lainnya.",
-    },
-];
 LogBox.ignoreAllLogs(true); // Ignore log notification by message
 export default function ChapterDetailScreen({ route }) {
     const navigation = useNavigation();
     const { chapter } = route.params;
-
+    const {role} = React.useContext(RoleContext);
     console.log(chapter, "<<<<chapter atssss");
 
     const [loading, setLoading] = useState(false);
@@ -133,13 +92,13 @@ export default function ChapterDetailScreen({ route }) {
     };
 
     const handleButtonPress = () => {
-        if (userRole === "student") {
+        if (role === "student") {
             if (showTimeInput) {
                 validateAndSave();
             } else {
                 setShowTimeInput(true);
             }
-        } else if (userRole === "teacher") {
+        } else if (role === "teacher") {
             navigation.navigate("EditChapter");
         }
     };
@@ -207,7 +166,7 @@ export default function ChapterDetailScreen({ route }) {
                     <View style={{ flex: 1, width: width * 0.94, gap: 15 }}>
                         <View>
                             <Text style={{ fontSize: 19, fontWeight: "bold" }}>
-                                Aljabar
+                                {chapter.name}
                             </Text>
                             <Text
                                 style={{
@@ -216,7 +175,7 @@ export default function ChapterDetailScreen({ route }) {
                                     color: "#75797d",
                                 }}
                             >
-                                {/* {chapter.description} */}
+                                {chapter.description}
                             </Text>
                         </View>
                         <View>
@@ -224,15 +183,15 @@ export default function ChapterDetailScreen({ route }) {
                                 Rangkuman Materi
                             </Text>
                             <View style={{ gap: 15 }}>
-                                {chapter.chapters[0].material.map((el) => (
-                                    <View key={el.id}>
+                                {chapter.material.map((el, idx) => (
+                                    <View key={idx}>
                                         <TouchableOpacity
                                             style={{
                                                 width: width * 0.95,
                                                 flexDirection: "row",
                                                 justifyContent: "space-between",
                                             }}
-                                            onPress={() => toggleOpen(el.id)}
+                                            onPress={() => toggleOpen(idx)}
                                         >
                                             <Text
                                                 style={{
@@ -242,13 +201,13 @@ export default function ChapterDetailScreen({ route }) {
                                             >
                                                 {el.name}
                                             </Text>
-                                            {openAccordionId === el.id ? (
+                                            {openAccordionId === idx ? (
                                                 <Minus color="#2F4858" />
                                             ) : (
                                                 <Plus color="#2F4858" />
                                             )}
                                         </TouchableOpacity>
-                                        {openAccordionId === el.id && (
+                                        {openAccordionId === idx && (
                                             <Text
                                                 style={{
                                                     width: width * 0.9,
@@ -265,7 +224,7 @@ export default function ChapterDetailScreen({ route }) {
                         </View>
                     </View>
                 </ScrollView>
-                {userRole === "student" && showTimeInput && (
+                {role === "student" && showTimeInput && (
                     <View style={styles.timeInputContainer}>
                         <Text style={{ fontSize: 16, fontWeight: "bold" }}>
                             Masukkan Waktu Belajar
@@ -330,7 +289,7 @@ export default function ChapterDetailScreen({ route }) {
                         style={styles.btn}
                     >
                         <Text style={{ color: "white" }}>
-                            {userRole === "student"
+                            {role === "student"
                                 ? showTimeInput
                                     ? "Simpan Study Plan"
                                     : "Generate Study Plan"
