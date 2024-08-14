@@ -19,6 +19,8 @@ const ProfileScreen = ({navigation, route}) => {
   
   const handleLogout = async () => {
     try {
+      console.log("masuk logout");
+      
       await SecureStore.deleteItemAsync("accessToken");
       setIsSignedIn(false);
     } catch (error) {
@@ -111,7 +113,7 @@ const ProfileScreen = ({navigation, route}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity onPress={() => {handleLogout}} style={styles.btn}>
+        <TouchableOpacity onPress={handleLogout} style={styles.btn}>
           <Text style={{ color: "white", fontSize: 20 }}>Logout</Text>
         </TouchableOpacity>
       </View>
