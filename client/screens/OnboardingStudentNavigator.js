@@ -21,7 +21,7 @@ export default function OnboardingNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Schedule" component={ScheduleScreenn} />
+      <Stack.Screen name="Schedule" component={ScheduleScreen} />
       <Stack.Screen name="Absensi" component={AbsensiScreen} />
       <Stack.Screen
         name="DetailMataPelajaran"

@@ -10,16 +10,43 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
+import * as SecureStore from "expo-secure-store";
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({route}) => {
   const navigation = useNavigation()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [data, setData] = React.useState(null);
+
+  const readUser = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      const res = await fetch("http://147.185.221.22:1489/api/user/info", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      setData(response)
+      setPhoneNumber(response.phoneNumber)
+    } catch (error) {
+      console.log("Failed to fetch user profile", error);
+    }
+  }
+
+  React.useEffect(() => {
+    readUser();
+  }, []);
+
   const ShowIcon = (props) => {
     const { width = 20, height = 20, fill = "gray" } = props;
     return (
@@ -36,8 +63,13 @@ const EditProfileScreen = () => {
       </Svg>
     );
   };
-  function handleEdit() {
+  async function handleEdit() {
     Keyboard.dismiss();
+    const data = {
+      phoneNumber,
+      password,
+    }; 
+    // const res = await fetch("http://http://147.185.221.22:1489/api/")
   }
 
   return (
@@ -54,8 +86,8 @@ const EditProfileScreen = () => {
             source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
             style={{ width: 150, height: 150, borderRadius: 100 }}
           />
-          <Text style={{ fontSize: 20 }}>Lutfi Farhan Hakim</Text>
-          <Text style={{ color: "gray" }}>@lutfifhakim</Text>
+          <Text style={{ fontSize: 20 }}>{data?.name}</Text>
+          <Text style={{ color: "gray" }}>@{data?.username}</Text>
         </View>
         <View style={styles.container}>
         <ScrollView>
@@ -67,7 +99,7 @@ const EditProfileScreen = () => {
               <View style={{ flexDirection: "column", gap: 5 }}>
                 <Text>Nama</Text>
                 <Text style={{ color: "gray", fontSize: 12 }}>
-                  Lutfi Farhan Hakim
+                  {data?.name}
                 </Text>
               </View>
             </View>
@@ -78,7 +110,7 @@ const EditProfileScreen = () => {
               <View style={{ flexDirection: "column", gap: 5 }}>
                 <Text>Email</Text>
                 <Text style={{ color: "gray", fontSize: 12 }}>
-                  lutfi@mail.com
+                  {data?.email}
                 </Text>
               </View>
             </View>

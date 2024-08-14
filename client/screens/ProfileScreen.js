@@ -9,7 +9,8 @@ import {
 import { height, width } from "./AbsensiScreen";
 import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
 
-const ProfileScreen = ({navigation}) => {
+const ProfileScreen = ({navigation, route}) => {
+  const {data} = route.params;
   return (
     <>
       <View style={{ flex: 1, alignItems: "center", height, width }}>
@@ -24,8 +25,8 @@ const ProfileScreen = ({navigation}) => {
             source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
             style={{ width: 150, height: 150, borderRadius: 100 }}
           />
-          <Text style={{ fontSize: 20 }}>Lutfi Farhan Hakim</Text>
-          <Text style={{ color: "gray" }}>@lutfifhakim</Text>
+          <Text style={{ fontSize: 20 }}>{data?.name}</Text>
+          <Text style={{ color: "gray" }}>@{data?.username}</Text>
         </View>
         <View style={styles.container}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -33,7 +34,7 @@ const ProfileScreen = ({navigation}) => {
             <View style={{ flexDirection: "column", gap: 5 }}>
               <Text>Nama</Text>
               <Text style={{ color: "gray", fontSize: 12 }}>
-                Lutfi Farhan Hakim
+                {data?.name}
               </Text>
             </View>
           </View>
@@ -42,7 +43,7 @@ const ProfileScreen = ({navigation}) => {
             <View style={{ flexDirection: "column", gap: 5 }}>
               <Text>Email</Text>
               <Text style={{ color: "gray", fontSize: 12 }}>
-                lutfi@mail.com
+                {data?.email}
               </Text>
             </View>
           </View>
@@ -84,7 +85,7 @@ const ProfileScreen = ({navigation}) => {
               <View style={{ flexDirection: "column", gap: 5 }}>
                 <Text>Nomor Telepon</Text>
                   <Text style={{ color: "gray", fontSize: 12 }}>
-                    (+62) 0123456789
+                   {data?.phoneNumber}
                   </Text>
               </View>
             </View>
