@@ -1,17 +1,20 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useAuth } from '../hooks/useAuth'; // Hook untuk mendapatkan data profil
 import { Card } from 'tamagui'; // Mengimpor komponen Card dari Tamagui
 import { Ionicons } from 'react-native-vector-icons'; // Mengimpor ikon dari react-native-vector-icons
+import * as SecureStore from 'expo-secure-store'; // Mengimpor SecureStore dari Expo
+import { RoleContext } from '../App';
 
-const QRCodeScreen = () => {
+const QRCodeScreen = ({route}) => {
   const navigation = useNavigation();
-  const { user } = useAuth(); // Hook yang mengakses data profil pengguna
+  console.log(route.params, "<<<<<<<");
+  
 
   // Data QR code dummy
-  const qrValue = "Student ID: 12345"; // Ubah dengan data yang sesuai jika diperlukan
+  const qrValue = route.params.userId; // Ubah dengan data yang sesuai jika diperlukan
 
   return (
     <View style={styles.container}>

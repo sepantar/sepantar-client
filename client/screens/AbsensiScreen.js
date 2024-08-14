@@ -9,7 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import react, * as React from "react"
 import { Accordion, Button, Paragraph, Square } from "tamagui";
+import * as SecureStore from "expo-secure-store";
+import { RoleContext } from "../App";
+import QRCodeScreen from "./QRCodeScreen";
+import AttendanceScreen from "./AttendanceScreen";
 
 export const { width, height } = Dimensions.get("window");
 
@@ -39,6 +44,33 @@ const accordionData = [
 
 const AbsensiScreen = () => {
   const navigation = useNavigation();
+  const { role } = React.useContext(RoleContext);
+  const [data, setData] = React.useState(null);
+  const readUser = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("accessToken");
+      const res = await fetch("https://sepantar-app.vercel.app/api/user/info", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      console.log(response, "<<<<absensi");
+      setData(response);
+    } catch (error) {
+      console.log("Failed to fetch user profile", error);
+    }
+  }
+  console.log(data, "<<<<data");
+
+  React.useEffect(() => {
+    readUser();
+  }, []);
+
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
       <StatusBar />
@@ -48,9 +80,15 @@ const AbsensiScreen = () => {
         </TouchableOpacity>
       </View>
       <Text style={styles.title}>Absensi</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={{ color: "white" }}>Generate QR / Scan QR Code</Text>
-      </TouchableOpacity>
+
+      {role === "teacher" ?
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Attendance")}>
+          <Text style={{ color: "white" }}>Scan QR Code</Text>
+        </TouchableOpacity>
+        :
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('QRCodeScreen',{userId:data?._id})}>
+          <Text style={{ color: "white" }}>Generate QR</Text>
+        </TouchableOpacity>}
       <View style={{ flex: 1, width: width * 0.9, paddingVertical: 30 }}>
         <Text style={{ fontSize: 19, fontWeight: "bold", color: "#2F4858" }}>
           Absensi Hari Ini
