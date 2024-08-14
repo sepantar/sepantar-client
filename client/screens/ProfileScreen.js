@@ -7,10 +7,27 @@ import {
   View,
 } from "react-native";
 import { height, width } from "./AbsensiScreen";
+import * as SecureStore from "expo-secure-store";
 import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
+import * as React from "react";
+import { SignedInContext } from "../App";
 
 const ProfileScreen = ({navigation, route}) => {
   const {data} = route.params;
+  const {setIsSignedIn} = React.useContext(SignedInContext);
+
+  
+  const handleLogout = async () => {
+    try {
+      await SecureStore.deleteItemAsync("accessToken");
+      setIsSignedIn(false);
+    } catch (error) {
+      console.log(error);
+      Alert.alert(error.message);
+    }
+  }
+
+
   return (
     <>
       <View style={{ flex: 1, alignItems: "center", height, width }}>
@@ -94,7 +111,7 @@ const ProfileScreen = ({navigation, route}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity onPress={() => {handleLogout}} style={styles.btn}>
           <Text style={{ color: "white", fontSize: 20 }}>Logout</Text>
         </TouchableOpacity>
       </View>

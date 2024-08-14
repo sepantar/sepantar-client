@@ -82,7 +82,7 @@ const HomeScreen = () => {
               Role: {data?.role}
             </Text>
             <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
-              Class: {data?.classDetail?.class_name}
+              Class: {data?.classDetail?.class_name || data?.subject?.name}
             </Text>
           </Stack>
         </Card>
