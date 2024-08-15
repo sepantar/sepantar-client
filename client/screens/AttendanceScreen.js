@@ -1,6 +1,7 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Button,
   StyleSheet,
@@ -14,12 +15,13 @@ import * as SecureStore from "expo-secure-store";
 
 export default function AttendanceScreen({ route }) {
   // const { data } = route.params;
-  console.log(route.params, "<<<ID SCHEDULE");
+  // console.log(route.params, "<<<ID SCHEDULE");
   const data = route.params.data;
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [dataQR, setDataQR] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation(); // Initialize navigation
 
   if (!permission) {
@@ -38,10 +40,19 @@ export default function AttendanceScreen({ route }) {
       </View>
     );
   }
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>Loading...</Text>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   async function recordAttendance(dataQR) {
     try {
       console.log("masuk record attendance");
+      setLoading(true);
 
       const token = await SecureStore.getItemAsync("accessToken");
       const res = await fetch(
@@ -58,13 +69,14 @@ export default function AttendanceScreen({ route }) {
       if (!res.ok) {
         throw response;
       }
+      setLoading(false);
       console.log(response, "<<<<hasil attendance");
-      // Alert.alert(
-      //   `Attendance for ${response.class.class_name} class (${response.subject.name})`
-      // );
+
+      Alert.alert(`${response.message}`);
     } catch (error) {
       // Alert.alert(error.message);
       console.log("Failed to edit attendance", error);
+      Alert.alert(error.message);
     }
   }
 
@@ -74,14 +86,9 @@ export default function AttendanceScreen({ route }) {
       if (data !== dataQR) {
         setDataQR(data);
 
-        await recordAttendance(dataQR);
+        await recordAttendance(data);
         console.log(
           `Bar code with type ${type} and data ${data} has been scanned!`
-        );
-        Alert.alert(
-          `Bar code with type ${type} and data ${data} has been scanned!`,
-          "",
-          [{ text: "OK", onPress: () => setScanned(false) }]
         );
       }
     } else {
