@@ -292,7 +292,7 @@ export default function ChapterDetailScreen({ route }) {
                 ? showTimeInput
                   ? "Simpan Study Plan"
                   : "Generate Study Plan"
-                : "Edit Bab"}
+                : ""}
             </Text>
           </TouchableOpacity>
         </View>
