@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Keyboard,
   ScrollView,
@@ -16,8 +17,8 @@ import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
 
-const EditProfileScreen = ({route}) => {
-  const navigation = useNavigation()
+const EditProfileScreen = ({ route }) => {
+  const navigation = useNavigation();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -36,12 +37,12 @@ const EditProfileScreen = ({route}) => {
       if (!res.ok) {
         throw response;
       }
-      setData(response)
-      setPhoneNumber(response.phoneNumber)
+      setData(response);
+      setPhoneNumber(response.phoneNumber);
     } catch (error) {
       console.log("Failed to fetch user profile", error);
     }
-  }
+  };
 
   React.useEffect(() => {
     readUser();
@@ -64,12 +65,30 @@ const EditProfileScreen = ({route}) => {
     );
   };
   async function handleEdit() {
-    Keyboard.dismiss();
-    const data = {
-      phoneNumber,
-      password,
-    }; 
-    // const res = await fetch("http://http://13.239.38.113/api/")
+    try {
+      Keyboard.dismiss();
+      const token = await SecureStore.getItemAsync("accessToken");
+      const data = {
+        phoneNumber,
+        password,
+      };
+      const res = await fetch("http://147.185.221.22:1489/api/user/info", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw response;
+      }
+      Alert.alert("Profile updated successfully");
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error while updating profile", error.message);
+    }
   }
 
   return (
@@ -83,115 +102,130 @@ const EditProfileScreen = ({route}) => {
         </View>
         <View style={{ alignItems: "center", gap: 10, marginBottom: 30 }}>
           <Image
-            source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
+            source={{ uri: "https://avatar.iran.liara.run/public/" }}
             style={{ width: 150, height: 150, borderRadius: 100 }}
           />
           <Text style={{ fontSize: 20 }}>{data?.name}</Text>
           <Text style={{ color: "gray" }}>@{data?.username}</Text>
         </View>
         <View style={styles.container}>
-        <ScrollView>
-          <View style={{ gap: 20 }}>
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-            >
-              <User color="#2F4858" />
-              <View style={{ flexDirection: "column", gap: 5 }}>
-                <Text>Nama</Text>
-                <Text style={{ color: "gray", fontSize: 12 }}>
-                  {data?.name}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-            >
-              <Mail color="#2F4858" />
-              <View style={{ flexDirection: "column", gap: 5 }}>
-                <Text>Email</Text>
-                <Text style={{ color: "gray", fontSize: 12 }}>
-                  {data?.email}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+          <ScrollView>
+            <View style={{ gap: 20 }}>
               <View
-                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
               >
-                <LockKeyhole color="#2F4858" />
+                <User color="#2F4858" />
                 <View style={{ flexDirection: "column", gap: 5 }}>
-                  <Text>Password</Text>
-                  <View style={styles.input_block}>
+                  <Text>Nama</Text>
+                  <Text style={{ color: "gray", fontSize: 12 }}>
+                    {data?.name}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+              >
+                <Mail color="#2F4858" />
+                <View style={{ flexDirection: "column", gap: 5 }}>
+                  <Text>Email</Text>
+                  <Text style={{ color: "gray", fontSize: 12 }}>
+                    {data?.email}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <LockKeyhole color="#2F4858" />
+                  <View style={{ flexDirection: "column", gap: 5 }}>
+                    <Text>Password</Text>
+                    <View style={styles.input_block}>
+                      <TextInput
+                        style={styles.input}
+                        keyboardType="default"
+                        placeholder="Enter Password"
+                        placeholderTextColor="gray"
+                        autoCorrect={false}
+                        secureTextEntry={isPasswordVisible ? false : true}
+                        autoCapitalize="none"
+                        value={password}
+                        onChangeText={setPassword}
+                      />
+                      {!isPasswordVisible && (
+                        <TouchableOpacity
+                          onPress={() =>
+                            setIsPasswordVisible((previous) => !previous)
+                          }
+                          style={styles.visible_block}
+                        >
+                          <ShowIcon />
+                        </TouchableOpacity>
+                      )}
+                      {isPasswordVisible && (
+                        <TouchableOpacity
+                          onPress={() =>
+                            setIsPasswordVisible((previous) => !previous)
+                          }
+                          style={styles.visible_block}
+                        >
+                          <HideIcon />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <Phone color="#2F4858" />
+                  <View style={{ flexDirection: "column", gap: 5 }}>
+                    <Text>Nomor Telepon</Text>
                     <TextInput
                       style={styles.input}
-                      keyboardType="default"
-                      placeholder="Enter Password"
-                      placeholderTextColor="gray"
-                      autoCorrect={false}
-                      secureTextEntry={isPasswordVisible ? false : true}
-                      autoCapitalize="none"
-                      value={password}
-                      onChangeText={setPassword}
+                      placeholder="(+62) 0123456789"
+                      value={phoneNumber}
+                      onChangeText={setPhoneNumber}
                     />
-                    {!isPasswordVisible && (
-                      <TouchableOpacity
-                        onPress={() =>
-                          setIsPasswordVisible((previous) => !previous)
-                        }
-                        style={styles.visible_block}
-                      >
-                        <ShowIcon />
-                      </TouchableOpacity>
-                    )}
-                    {isPasswordVisible && (
-                      <TouchableOpacity
-                        onPress={() =>
-                          setIsPasswordVisible((previous) => !previous)
-                        }
-                        style={styles.visible_block}
-                      >
-                        <HideIcon />
-                      </TouchableOpacity>
-                    )}
                   </View>
                 </View>
               </View>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => {
+                handleEdit();
               }}
             >
-              <View
-                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+              <Text
+                style={{ color: "white", fontSize: 15, textAlign: "center" }}
               >
-                <Phone color="#2F4858" />
-                <View style={{ flexDirection: "column", gap: 5 }}>
-                  <Text>Nomor Telepon</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="(+62) 0123456789"
-                    value={phoneNumber}
-                    onChangeText={setPhoneNumber}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.btn} onPress={() => {handleEdit()}}>
-            <Text style={{ color: "white", fontSize: 15, textAlign: "center" }}>
-              Save
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
+                Save
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
       </View>
     </>

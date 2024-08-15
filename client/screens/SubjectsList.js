@@ -90,7 +90,7 @@ const SubjectListScreen = () => {
                 }}
               >
                 <Image
-                  source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
+                  source={{ uri: "https://th.bing.com/th/id/OIP.XzNTde3anKlyPZBVebOjNQAAAA?w=474&h=474&rs=1&pid=ImgDetMain" }}
                   style={{ width: 150, height: 150, borderRadius: 10 }}
                 />
                 <View

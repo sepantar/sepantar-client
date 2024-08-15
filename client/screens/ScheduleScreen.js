@@ -12,29 +12,7 @@ import { ArrowLeft } from "lucide-react-native";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 
-const subjectsData = [
-  {
-    id: "1",
-    image: "https://fakeimg.pl/400x400?font=bebas",
-    title: "Matematika",
-    schedule: "08.00 - 10.00",
-    teacherName: "Dian",
-  },
-  {
-    id: "2",
-    image: "https://fakeimg.pl/400x400?font=bebas",
-    title: "Biologi",
-    schedule: "10.00 - 12.00",
-    teacherName: "Lutfi",
-  },
-  {
-    id: "3",
-    image: "https://fakeimg.pl/400x400?font=bebas",
-    title: "Bahasa Indonesia",
-    schedule: "13.00 - 15.00",
-    teacherName: "Dian",
-  },
-];
+
 
 const COLORS = { blue: "#2F4858", yellow: "#F6AE2D", white: "#fff" };
 
@@ -102,7 +80,7 @@ const ScheduleScreen = () => {
                   }}
                 >
                   <Image
-                    source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
+                    source={{ uri: "https://th.bing.com/th/id/OIP.XzNTde3anKlyPZBVebOjNQAAAA?w=474&h=474&rs=1&pid=ImgDetMain" }}
                     style={{ width: 150, height: 150, borderRadius: 10 }}
                   />
                   <View
