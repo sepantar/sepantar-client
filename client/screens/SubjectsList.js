@@ -45,7 +45,7 @@ const SubjectListScreen = () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
       //ini link nya blm bner
-      const res = await fetch("https://sepantar-app.vercel.app/api/user/subject", {
+      const res = await fetch("http://147.185.221.22:1489/api/user/subject", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -63,6 +63,8 @@ const detailSubjectData = [
 export default function ChapterListStudyPlanScreen({route}) {
   const navigation = useNavigation();
   const {perChapter} = route.params  
+  console.log(perChapter, "perChapter, chapterliststudyplanscreen");
+  
   const [data, setData] = useState(perChapter);
   return (
     <View style={{ flex: 1, alignItems: "center", height, width }}>
@@ -77,11 +79,11 @@ export default function ChapterListStudyPlanScreen({route}) {
         <FlatList
           data={data}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={()=>navigation.navigate("StudyPlan")} style={styles.btn}>
+            <TouchableOpacity onPress={()=>navigation.navigate("StudyPlan", {item:item})} style={styles.btn}>
               <Text style={styles.chapters}>{item.name}</Text>
             </TouchableOpacity>
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, idx) => idx}
         />
       </View>
     </View>
