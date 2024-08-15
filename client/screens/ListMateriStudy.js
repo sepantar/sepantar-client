@@ -24,7 +24,7 @@ export default function ListMateriStudyPlan() {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
       const res = await fetch(
-        "https://sepantar-app.vercel.app/api/user/subject",
+        "http://147.185.221.22:1489/api/user/subject",
         {
           method: "GET",
           headers: {

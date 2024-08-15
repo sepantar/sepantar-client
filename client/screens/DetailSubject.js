@@ -84,8 +84,7 @@ const DetailSubjectScreen = ({ route }) => {
   const readDetailMapel = async () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
-      console.log(token);
-      let url = `http://147.185.221.22:1489/api/subject/`;
+      let url = `https://sepantar-app.vercel.app/api/subject/`;
       if (dariSubject) {
         url = url + dariSubject;
       }
@@ -104,10 +103,9 @@ const DetailSubjectScreen = ({ route }) => {
         throw response;
       }
       console.log(response, "<<<<<detail fetch subject");
-
       setData(response);
     } catch (error) {
-      console.log("Failed to fetch user profile", error);
+      console.log("Failed to fetch  subject detail", error);
     }
   };
   React.useEffect(() => {
