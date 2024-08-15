@@ -17,7 +17,7 @@ import * as SecureStore from "expo-secure-store";
 
 const StudyPlanScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { item } = route.params;
+  const { item, chapterId } = route.params;
   // console.log(item, "item dari params");
   const [data, setData] = useState(null);
 
@@ -58,19 +58,49 @@ const StudyPlanScreen = ({ route }) => {
         setLoading(false);
       }
       Alert.alert("Success", response.message);
-      navigation.navigate("StudyPlanSubjectList");
+      // navigation.navigate("StudyPlanSubjectList");
     } catch (error) {
       console.log("Failed to delete study plan", error);
       Alert.alert("Error", error.message);
     }
   };
 
+  async function handlePut(data) {
+    try {
+      setLoading(true);
+      const token = await SecureStore.getItemAsync("accessToken");
+      let res = await fetch(`http://147.185.221.22:1489/api/user/studyplan`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
+      const response = await res.json();
+      console.log(response, "<<<<<response put status study plan");
+      if (!res.ok) {
+        throw response;
+      }
+      if (response) {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message);
+    }
+  }
+
   const handleCheck = (idx) => {
     console.log(data, "dataaa");
     if (data?.plan_contents) {
       const newData = JSON.parse(JSON.stringify(data)); // Deep copy data
       newData.plan_contents[idx].status = !newData.plan_contents[idx].status;
-      if (newData) setData(newData);
+      if (newData) {
+        setData(newData);
+        handlePut(JSON.stringify(newData));
+      }
+      console.log(newData, "data setelah di check");
+      console.log(newData.plan_contents, "<<<<<<<<<<<<<");
     }
   };
 
@@ -83,8 +113,15 @@ const StudyPlanScreen = ({ route }) => {
       const token = await SecureStore.getItemAsync("accessToken");
       // console.log(item, "item di studyplanscreen");
 
-      // console.log(item._id, "<<<<<item id");
-      let url = `https://sepantar-app.vercel.app/api/user/studyplan?chapterId=${item._id}`;
+      console.log(item._id, chapterId, "<<<<<item id");
+      let url = `http://147.185.221.22:1489/api/user/studyplan?chapterId=`;
+      if (chapterId) {
+        url += chapterId;
+      }
+      if (item._id) {
+        url += item._id;
+      }
+      // let url = `http://147.185.221.22:1489/api/user/studyplan?chapterId=${item._id||chapterId}`;
       const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -95,7 +132,7 @@ const StudyPlanScreen = ({ route }) => {
       if (!res.ok) {
         throw response;
       }
-      // console.log(response, "<<<<<detail fetch studyplan di studyplanscreen");
+      console.log(response, "<<<<<detail fetch studyplan di studyplanscreen");
       setData(response);
     } catch (error) {
       console.log(error);
@@ -121,7 +158,7 @@ const StudyPlanScreen = ({ route }) => {
     );
   }
 
-  const renderTask = ({ item, planId }) => (
+  const renderTask = ({ item }) => (
     <View style={styles.taskItem}>
       <Text style={[styles.taskText]}>{item}</Text>
     </View>
@@ -139,7 +176,7 @@ const StudyPlanScreen = ({ route }) => {
       {/* Body with List of Study Plans */}
       <Stack space="$4" style={styles.body}>
         <View style={styles.accordionSection}>
-          {data?.plan_contents.map((plan, idx) => (
+          {data?.plan_contents?.map((plan, idx) => (
             <Card
               key={idx}
               padding="$4"
@@ -149,7 +186,6 @@ const StudyPlanScreen = ({ route }) => {
               style={styles.card}
             >
               <View style={styles.accordionItem}>
-                <Text>{plan.status ? "checked" : "unchecked"}</Text>
                 <TouchableOpacity
                   onPress={() => handleCheck(idx)}
                   style={[styles.checkBox, plan.status && styles.checkedBox]}
@@ -193,7 +229,7 @@ const StudyPlanScreen = ({ route }) => {
             </Card>
           ))}
           <TouchableOpacity
-            onPress={() => handleDeletePlan(data.chapterId)}
+            onPress={() => handleDeletePlan(data?.chapterId)}
             style={styles.deleteButton}
           >
             <Text style={styles.deleteButtonText}>Delete Study Plan</Text>

@@ -103,22 +103,32 @@ export default function ChapterDetailScreen({ route }) {
   const addStudyPlan = async () => {
     try {
       console.log("masuk addStudyPlan");
+      console.log({
+        start: studyPlan.startTime,
+        to: studyPlan.endTime,
+        chapterId: chapter._id,
+      });
+
       setLoading(true);
       const token = await SecureStore.getItemAsync("accessToken");
-      const res = await fetch("http://147.185.221.22:1489/api/subject/studyplan", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          start: studyPlan.startTime,
-          to: studyPlan.endTime,
-          chapterId: chapter._id,
-        }),
-      });
+      const res = await fetch(
+        "http://147.185.221.22:1489/api/subject/studyplan",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            start: studyPlan.startTime,
+            to: studyPlan.endTime,
+            chapterId: chapter._id,
+          }),
+        }
+      );
       const response = await res.json();
       if (!res.ok) {
         console.log(response, "<<<<response");
+        setLoading(false);
         Alert.alert("Error", response.message);
         throw response;
       }
@@ -127,7 +137,7 @@ export default function ChapterDetailScreen({ route }) {
       }
       console.log(response);
       Alert.alert("Success", response.message);
-      navigation.navigate("StudyPlan");
+      navigation.navigate("Home");
     } catch (error) {
       console.log(error, "<<<<<<<<<<<<<<<<<<<error");
       // Alert.alert("Error", "An error occurred while add study plan");
