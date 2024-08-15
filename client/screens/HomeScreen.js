@@ -72,7 +72,7 @@ const HomeScreen = () => {
         >
           <View style={styles.avatarContainer}>
             <Image
-              source={require("../assets/adaptive-icon.png")} // Ganti dengan path gambar avatar Anda
+              source={{uri: "https://avatar.iran.liara.run/public/"}} // Ganti dengan path gambar avatar Anda
               style={styles.avatar}
             />
           </View>

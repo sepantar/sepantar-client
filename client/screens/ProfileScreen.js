@@ -12,23 +12,21 @@ import { ArrowLeft, LockKeyhole, Mail, Phone, User } from "lucide-react-native";
 import * as React from "react";
 import { SignedInContext } from "../App";
 
-const ProfileScreen = ({navigation, route}) => {
-  const {data} = route.params;
-  const {setIsSignedIn} = React.useContext(SignedInContext);
+const ProfileScreen = ({ navigation, route }) => {
+  const { data } = route.params;
+  const { setIsSignedIn } = React.useContext(SignedInContext);
 
-  
   const handleLogout = async () => {
     try {
       console.log("masuk logout");
-      
+
       await SecureStore.deleteItemAsync("accessToken");
       setIsSignedIn(false);
     } catch (error) {
       console.log(error);
       Alert.alert(error.message);
     }
-  }
-
+  };
 
   return (
     <>
@@ -41,7 +39,7 @@ const ProfileScreen = ({navigation, route}) => {
         </View>
         <View style={{ alignItems: "center", gap: 10, marginBottom: 30 }}>
           <Image
-            source={{ uri: "https://fakeimg.pl/400x400?font=bebas" }}
+            source={{ uri: "https://avatar.iran.liara.run/public/" }}
             style={{ width: 150, height: 150, borderRadius: 100 }}
           />
           <Text style={{ fontSize: 20 }}>{data?.name}</Text>
@@ -52,18 +50,14 @@ const ProfileScreen = ({navigation, route}) => {
             <User color="#2F4858" />
             <View style={{ flexDirection: "column", gap: 5 }}>
               <Text>Nama</Text>
-              <Text style={{ color: "gray", fontSize: 12 }}>
-                {data?.name}
-              </Text>
+              <Text style={{ color: "gray", fontSize: 12 }}>{data?.name}</Text>
             </View>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Mail color="#2F4858" />
             <View style={{ flexDirection: "column", gap: 5 }}>
               <Text>Email</Text>
-              <Text style={{ color: "gray", fontSize: 12 }}>
-                {data?.email}
-              </Text>
+              <Text style={{ color: "gray", fontSize: 12 }}>{data?.email}</Text>
             </View>
           </View>
           <View
@@ -86,7 +80,11 @@ const ProfileScreen = ({navigation, route}) => {
                 </TouchableOpacity>
               </View>
             </View>
-            <TouchableOpacity onPress={()=>{navigation.navigate("EditProfile")}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("EditProfile");
+              }}
+            >
               <Text style={{ color: "gray", fontSize: 12 }}>Edit</Text>
             </TouchableOpacity>
           </View>
@@ -103,12 +101,16 @@ const ProfileScreen = ({navigation, route}) => {
               <Phone color="#2F4858" />
               <View style={{ flexDirection: "column", gap: 5 }}>
                 <Text>Nomor Telepon</Text>
-                  <Text style={{ color: "gray", fontSize: 12 }}>
-                   {data?.phoneNumber}
-                  </Text>
+                <Text style={{ color: "gray", fontSize: 12 }}>
+                  {data?.phoneNumber}
+                </Text>
               </View>
             </View>
-            <TouchableOpacity onPress={()=>{navigation.navigate("EditProfile")}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("EditProfile");
+              }}
+            >
               <Text style={{ color: "gray", fontSize: 12 }}>Edit</Text>
             </TouchableOpacity>
           </View>
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   btn: {
     marginVertical: 40,
     height: 50,
-    width: width*0.8,
+    width: width * 0.8,
     borderRadius: 10,
     backgroundColor: "#2F4858",
     justifyContent: "center",
