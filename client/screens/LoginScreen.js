@@ -31,7 +31,7 @@ export default function LoginScreen() {
         return;
       }
 
-      const res = await fetch("http://13.239.38.113/api/user/login", {
+      const res = await fetch("http://147.185.221.22:1489/api/user/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
@@ -40,23 +40,19 @@ export default function LoginScreen() {
       if (!res.ok) {
         throw response;
       }
-      await SecureStore.setItemAsync(
-        "accessToken",
-        response.access_token
-      );
+      await SecureStore.setItemAsync("accessToken", response.access_token);
       await SecureStore.setItemAsync("role", response.role);
-      
+
       const role = await SecureStore.getItemAsync("role");
       setIsSignedIn(true);
-      setRole(role); 
-      
+      setRole(role);
 
       // Biasanya Anda akan melakukan autentikasi di sini
       Alert.alert("Success", `Logged in as ${email}`);
       // Navigasi ke HomeScreen setelah login
       // if (isAppFirstLaunched === true) {
       //   navigation.replace("Onboarding");
-      // } 
+      // }
       // Uncomment jika menggunakan react-navigation
     } catch (error) {
       console.log(error);
