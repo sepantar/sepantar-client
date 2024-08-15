@@ -25,7 +25,7 @@ const HomeScreen = () => {
   const readUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
-      const res = await fetch('http://13.239.38.113/api/user/info', {
+      const res = await fetch("http://147.185.221.22:1489/api/user/info", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,12 +36,12 @@ const HomeScreen = () => {
         throw response;
       }
       console.log(response, "<<<<home");
-      
-      setData(response)
+
+      setData(response);
     } catch (error) {
       console.log("Failed to fetch user profile", error);
     }
-  }
+  };
 
   React.useEffect(() => {
     readUser();
@@ -77,17 +77,29 @@ const HomeScreen = () => {
             />
           </View>
           <Stack spacing="$2" style={styles.userInfo}>
-            <Text style={{fontSize: 20, fontWeight: "bold", color: "#3b3b3b"}}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "bold", color: "#3b3b3b" }}
+            >
               {data?.name}
             </Text>
-            <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
+            <Text
+              style={{ fontSize: 16, color: "white", fontWeight: "semibold" }}
+            >
               Role: {data?.role}
             </Text>
-            {data?.role === "teacher" ? <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
-              Subject: {data?.subject?.name}
-            </Text> : <Text style={{fontSize: 16, color: "white", fontWeight: "semibold"}}>
-              Class: {data?.classDetail?.class_name}
-            </Text>}
+            {data?.role === "teacher" ? (
+              <Text
+                style={{ fontSize: 16, color: "white", fontWeight: "semibold" }}
+              >
+                Subject: {data?.subject?.name}
+              </Text>
+            ) : (
+              <Text
+                style={{ fontSize: 16, color: "white", fontWeight: "semibold" }}
+              >
+                Class: {data?.classDetail?.class_name}
+              </Text>
+            )}
           </Stack>
         </Card>
       </TouchableOpacity>
@@ -101,7 +113,11 @@ const HomeScreen = () => {
         shadow="$2"
         style={styles.actionCard}
       >
-        {data?.role === "student" ? <ButtonGroupStudent navigation={navigation}/>: <ButtonGroupTeacher navigation={navigation}/>}
+        {data?.role === "student" ? (
+          <ButtonGroupStudent navigation={navigation} />
+        ) : (
+          <ButtonGroupTeacher navigation={navigation} />
+        )}
       </Card>
     </View>
   );
@@ -157,7 +173,7 @@ const styles = StyleSheet.create({
     marginBottom: 15, // Jarak antara teks dan tombol
     fontSize: 18, // Ukuran font teks
     marginTop: 25,
-  }
+  },
 });
 
 export default HomeScreen;

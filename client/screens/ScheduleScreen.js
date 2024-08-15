@@ -44,7 +44,7 @@ const ScheduleScreen = () => {
   const readUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
-      const res = await fetch("http://13.239.38.113/api/user/schedule", {
+      const res = await fetch("http://147.185.221.22:1489/api/user/schedule", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,13 +54,13 @@ const ScheduleScreen = () => {
       if (!res.ok) {
         throw response;
       }
-      console.log(response,"<<<<<<schedule");
-      
-      setData(response)
+      console.log(response, "<<<<<<schedule");
+
+      setData(response);
     } catch (error) {
       console.log("Failed to fetch user profile", error);
     }
-  }
+  };
 
   React.useEffect(() => {
     readUser();
@@ -75,7 +75,15 @@ const ScheduleScreen = () => {
         </TouchableOpacity>
       </View>
       <Text style={styles.title}>Jadwal Mata Pelajaran Hari Ini</Text>
-      <View style={{ flex: 1, width: "100%", paddingHorizontal: 15, gap: 10, marginTop: 5 }}>
+      <View
+        style={{
+          flex: 1,
+          width: "100%",
+          paddingHorizontal: 15,
+          gap: 10,
+          marginTop: 5,
+        }}
+      >
         <ScrollView>
           {data?.map((el, idx) => {
             return (
@@ -126,11 +134,15 @@ const ScheduleScreen = () => {
                           color: idx % 2 === 0 ? COLORS.white : COLORS.blue,
                         }}
                       >
-                        {el.teacher.name} 
+                        {el.teacher.name}
                       </Text>
                     </View>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("DetailMataPelajaran",{subject:el})}
+                      onPress={() =>
+                        navigation.navigate("DetailMataPelajaran", {
+                          subject: el,
+                        })
+                      }
                       style={{
                         backgroundColor:
                           idx % 2 === 0 ? COLORS.yellow : COLORS.blue,
@@ -171,6 +183,6 @@ const styles = StyleSheet.create({
     color: "#2F4858",
     paddingHorizontal: 15,
     alignSelf: "flex-start",
-    marginBottom: 15
+    marginBottom: 15,
   },
 });

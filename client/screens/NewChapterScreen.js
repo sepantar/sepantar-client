@@ -82,7 +82,7 @@ export default function NewChapterScreen({ route }) {
       const res = await DocumentPicker.getDocumentAsync({
         type: "application/pdf",
         copyToCacheDirectory: false,
-      });;
+      });
 
       if (res.canceled === false) {
         let data = new FormData();
@@ -97,7 +97,7 @@ export default function NewChapterScreen({ route }) {
         data.append("subjectId", route.params.subjectId.toString());
 
         const response = await fetch(
-          "http://13.239.38.113/api/subject/chapter",
+          "http://147.185.221.22:1489/api/subject/chapter",
           {
             method: "POST",
             headers: {
@@ -113,7 +113,7 @@ export default function NewChapterScreen({ route }) {
           console.error("Error response:", resJson);
           throw new Error(resJson.message || "Upload failed");
         }
-        
+
         Alert.alert("Success", "Document uploaded successfully");
       } else {
         throw new Error("User canceled document picking");

@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeft, ChevronDown } from "lucide-react-native";
 import {
+  Alert,
   Dimensions,
   ScrollView,
   StatusBar,
@@ -9,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import react, * as React from "react"
+import react, * as React from "react";
 import { Accordion, Button, Paragraph, Square } from "tamagui";
 import * as SecureStore from "expo-secure-store";
 import { RoleContext } from "../App";
@@ -64,7 +65,7 @@ const AbsensiScreen = () => {
     } catch (error) {
       console.log("Failed to fetch user profile", error);
     }
-  }
+  };
   console.log(data, "<<<<data");
 
   React.useEffect(() => {
@@ -81,14 +82,48 @@ const AbsensiScreen = () => {
       </View>
       <Text style={styles.title}>Absensi</Text>
 
-      {role === "teacher" ?
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Attendance")}>
+      {role === "teacher" ? (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={async () => {
+            try {
+              const token = await SecureStore.getItemAsync("accessToken");
+              const res = await fetch(
+                "http://147.185.221.22:1489/api/attendance/check",
+                {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+              const response = await res.json();
+              if (!res.ok) {
+                throw response;
+              }
+              console.log(response, "<<<<cek jawdal");
+              Alert.alert(
+                `Attendance for ${response.class.class_name} class (${response.subject.name})`
+              );
+              navigation.navigate("Attendance", { data: response._id });
+            } catch (error) {
+              Alert.alert(error.message);
+              console.log("Failed to fetch user profile", error);
+            }
+          }}
+        >
           <Text style={{ color: "white" }}>Scan QR Code</Text>
         </TouchableOpacity>
-        :
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('QRCodeScreen',{userId:data?._id})}>
+      ) : (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("QRCodeScreen", { userId: data?._id })
+          }
+        >
           <Text style={{ color: "white" }}>Generate QR</Text>
-        </TouchableOpacity>}
+        </TouchableOpacity>
+      )}
       <View style={{ flex: 1, width: width * 0.9, paddingVertical: 30 }}>
         <Text style={{ fontSize: 19, fontWeight: "bold", color: "#2F4858" }}>
           Absensi Hari Ini
