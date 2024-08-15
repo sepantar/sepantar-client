@@ -50,6 +50,39 @@ const AbsensiScreen = () => {
   const [data, setData] = React.useState(null);
   const [attendance, setAttendance] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const asbsensiMurid = [
+    {
+      id: "1",
+      name: "Dian",
+      kehadiran: "Hadir",
+      keterangan: "Hadir",
+    },
+    {
+      id: "2",
+      name: "Rahma",
+      kehadiran: "Tidak Hadir",
+      keterangan: "Sakit",
+    },
+    {
+      id: "3",
+      name: "Bayu",
+      kehadiran: "Hadir",
+      keterangan: "Hadir",
+    },
+    {
+      id: "4",
+      name: "Lutfi",
+      kehadiran: "Alpha",
+      keterangan: "Alpha",
+    },
+    // Tambahkan data dengan nilai kosong
+    {
+      id: "5",
+      name: "Siti",
+      kehadiran: "",
+      keterangan: "",
+    },
+  ];
   const readUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("accessToken");
@@ -204,82 +237,49 @@ const AbsensiScreen = () => {
                 })}
               </>
             ) : (
-              <Accordion style={{ flex: 1 }} type="multiple">
-                {accordionData.map((el, idx) => {
-                  return (
-                    <Accordion.Item key={idx} value={el.id}>
-                      <Accordion.Header>
-                        <Accordion.Trigger
-                          flexDirection="row"
-                          justifyContent="space-between"
-                          style={{
-                            width: "100%",
-                            backgroundColor: "transparent",
-                          }}
-                        >
-                          {({ open }) => (
-                            <>
-                              <Paragraph>{el.title}</Paragraph>
-                              <Square
-                                animation="quick"
-                                rotate={open ? "180deg" : "0deg"}
-                              >
-                                <ChevronDown color="#2F4858" />
-                              </Square>
-                            </>
-                          )}
-                        </Accordion.Trigger>
-                      </Accordion.Header>
-                      <Accordion.Content
+              <View style={{ flex: 1, width: width * 0.9, paddingTop: 10 }}>
+                <View style={styles.containerTopper}>
+                  <View style={styles.column}>
+                    <Text>No</Text>
+                  </View>
+                  <View style={styles.newColumn}>
+                    <Text>Nama</Text>
+                  </View>
+                  <View style={styles.newColumn}>
+                    <Text>Kelas</Text>
+                  </View>
+                  <View style={styles.newColumn}>
+                    <Text>Kehadiran</Text>
+                  </View>
+                </View>
+                <View style={styles.container2}>
+                  {attendance.map((el, idx) => {
+                    return (
+                      <View
+                        key={idx}
                         style={{
-                          width: "100%",
-                          backgroundColor: "#EBEBEB",
-                          borderRadius: 10,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          paddingVertical: 5,
                         }}
                       >
-                        <TouchableOpacity
-                          onPress={() => navigation.navigate("DetailAbsensi")}
-                        >
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              justifyContent: "space-around",
-                            }}
-                          >
-                            <View
-                              style={{
-                                flexDirection: "column",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Paragraph color="#01721A">Hadir</Paragraph>
-                              <Paragraph>{el.hadir}</Paragraph>
-                            </View>
-                            <View
-                              style={{
-                                flexDirection: "column",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Paragraph color="#F6AE2D">Izin</Paragraph>
-                              <Paragraph>{el.izin}</Paragraph>
-                            </View>
-                            <View
-                              style={{
-                                flexDirection: "column",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Paragraph color="#B95623">Alpha</Paragraph>
-                              <Paragraph>{el.alpa}</Paragraph>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                      </Accordion.Content>
-                    </Accordion.Item>
-                  );
-                })}
-              </Accordion>
+                        <View style={styles.column}>
+                          <Text>{idx + 1}</Text>
+                        </View>
+                        <View style={styles.newColumn}>
+                          <Text>{el.student.name}</Text>
+                        </View>
+                        <View style={styles.newColumn}>
+                          <Text>{el.class.class_name || "-"}</Text>
+                        </View>
+                        <View style={styles.newColumn}>
+                          <Text>{el.status || "-"}</Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
             )}
           </View>
         </ScrollView>
@@ -311,6 +311,17 @@ const styles = StyleSheet.create({
     color: "#2F4858",
     padding: 15,
   },
+  containerTopper: {
+    paddingHorizontal: 10,
+    backgroundColor: "#E6E6E6",
+    flexDirection: "row",
+    height: 40,
+    // alignContent: "center",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
+  },
   container: {
     borderWidth: 0.5,
     borderColor: "#2F4858",
@@ -319,6 +330,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     padding: 10,
+  },
+  container2: {
+    paddingHorizontal: 10,
+    backgroundColor: "#E6E6E6",
+    flexDirection: "column",
+    flex: 1,
+    marginTop: 5,
+    alignContent: "center",
+    borderBottomStartRadius: 10,
+    borderBottomEndRadius: 10,
   },
 });
 
