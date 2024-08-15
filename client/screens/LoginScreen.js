@@ -37,6 +37,7 @@ export default function LoginScreen() {
       });
 
       const response = await res.json();
+      setLoading(false);
       if (!res.ok) {
         throw response;
       }
@@ -56,7 +57,7 @@ export default function LoginScreen() {
       // Uncomment jika menggunakan react-navigation
     } catch (error) {
       console.log(error);
-      Alert.alert("Error", "An error occurred while logging in");
+      Alert.alert("Error", error.message);
     }
   };
 
