@@ -161,8 +161,8 @@ const DetailSubjectScreen = ({ route }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Text style={{ fontSize: 14, color: "#75797d" }}>Tingkat </Text>
-              <Text style={{ fontSize: 14, color: "#75797d" }}>10 Chapter</Text>
+              <Text style={{ fontSize: 14, color: "#75797d" }}>Tingkat {data?.level}</Text>
+              <Text style={{ fontSize: 14, color: "#75797d" }}>{data?.chapters.length} Chapter</Text>
             </View>
             <View style={{ marginTop: 20, gap: 5 }}>
               <Text
